@@ -1,0 +1,1 @@
+ALTER TABLE public.meal_plans ADD COLUMN start_date date;

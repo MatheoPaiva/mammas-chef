@@ -1,0 +1,3360 @@
+[
+  {
+    "title": "Greek Chicken Bowls",
+    "cuisine": "Mediterranean",
+    "region": "Greek-inspired",
+    "mealTypes": [
+      "lunch",
+      "dinner"
+    ],
+    "dietTags": [
+      "high-protein"
+    ],
+    "flavorTags": [
+      "lemony",
+      "herby",
+      "garlicky"
+    ],
+    "equipment": [
+      "sheet pan",
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 20,
+    "totalTimeMinutes": 40,
+    "servings": 4,
+    "nutrition": {
+      "calories": 520,
+      "protein": 38,
+      "carbs": 45,
+      "fats": 22
+    },
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 1.5,
+        "unit": "lb",
+        "prep": "cubed",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "brown rice",
+        "quantity": 1.5,
+        "unit": "cup",
+        "prep": "cooked",
+        "category": "grains"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "",
+        "prep": "diced",
+        "category": "produce"
+      },
+      {
+        "name": "cherry tomatoes",
+        "quantity": 1,
+        "unit": "pint",
+        "prep": "halved",
+        "category": "produce"
+      },
+      {
+        "name": "tzatziki",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Season chicken with olive oil, lemon, garlic, oregano, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Roast chicken at 425°F until cooked through, about 18 minutes."
+      },
+      {
+        "order": 3,
+        "text": "Serve over rice with cucumber, tomatoes, and tzatziki."
+      }
+    ],
+    "storageNotes": "Store components separately up to 4 days.",
+    "reheatNotes": "Reheat chicken and rice; keep vegetables and sauce cold.",
+    "prepAheadNotes": "Cook rice and chop vegetables up to 2 days ahead.",
+    "toddlerTip": "Serve deconstructed with sauce on the side.",
+    "glucoseTip": "Use extra vegetables and a smaller rice portion.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Turkey Kofta Plates",
+    "cuisine": "Mediterranean",
+    "region": "Eastern Mediterranean-inspired",
+    "mealTypes": [
+      "dinner"
+    ],
+    "dietTags": [
+      "high-protein"
+    ],
+    "flavorTags": [
+      "spiced",
+      "herby",
+      "savory"
+    ],
+    "equipment": [
+      "skillet",
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 25,
+    "totalTimeMinutes": 35,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "ground turkey",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "parsley",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 2,
+        "unit": "clove",
+        "prep": "minced",
+        "category": "produce"
+      },
+      {
+        "name": "cumin",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spices"
+      },
+      {
+        "name": "pita",
+        "quantity": 4,
+        "unit": "",
+        "category": "bakery"
+      },
+      {
+        "name": "romaine",
+        "quantity": 1,
+        "unit": "head",
+        "prep": "chopped",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Mix turkey with parsley, garlic, cumin, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Shape into small patties and sear until browned and cooked through."
+      },
+      {
+        "order": 3,
+        "text": "Serve with pita, romaine, and yogurt sauce if desired."
+      }
+    ],
+    "storageNotes": "Cooked kofta keeps up to 4 days refrigerated.",
+    "prepAheadNotes": "Shape kofta the night before and refrigerate covered.",
+    "toddlerTip": "Cut kofta into small strips and serve pita separately.",
+    "glucoseTip": "Use lettuce as the base and half a pita.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    },
+    "nutrition": {
+      "calories": 520,
+      "protein": 45,
+      "carbs": 30,
+      "fats": 15
+    }
+  },
+  {
+    "title": "Chickpea Greek Salad Lunch Boxes",
+    "cuisine": "Mediterranean",
+    "region": "Greek-inspired",
+    "mealTypes": [
+      "lunch"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-fiber"
+    ],
+    "flavorTags": [
+      "briny",
+      "fresh",
+      "lemony"
+    ],
+    "equipment": [
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 20,
+    "totalTimeMinutes": 20,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "chickpeas",
+        "quantity": 2,
+        "unit": "can",
+        "prep": "drained and rinsed",
+        "category": "canned goods"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "",
+        "prep": "diced",
+        "category": "produce"
+      },
+      {
+        "name": "grape tomatoes",
+        "quantity": 1,
+        "unit": "pint",
+        "prep": "halved",
+        "category": "produce"
+      },
+      {
+        "name": "feta",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "crumbled",
+        "category": "dairy"
+      },
+      {
+        "name": "kalamata olives",
+        "quantity": 0.33,
+        "unit": "cup",
+        "prep": "sliced",
+        "category": "pantry"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "lemon juice",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Whisk olive oil, lemon juice, oregano, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Toss chickpeas, vegetables, feta, and olives with dressing."
+      },
+      {
+        "order": 3,
+        "text": "Pack into lunch containers and keep cold."
+      }
+    ],
+    "storageNotes": "Keeps 3 days refrigerated.",
+    "prepAheadNotes": "Dress just before packing if you want the vegetables extra crisp.",
+    "toddlerTip": "Serve chickpeas lightly mashed with cucumber sticks.",
+    "glucoseTip": "Add grilled chicken or tuna for more protein.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    },
+    "nutrition": {
+      "calories": 400,
+      "protein": 15,
+      "carbs": 30,
+      "fats": 22
+    }
+  },
+  {
+    "title": "Egg Muffins with Spinach and Feta",
+    "cuisine": "Mediterranean",
+    "region": "Greek-inspired",
+    "mealTypes": [
+      "breakfast"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-protein"
+    ],
+    "flavorTags": [
+      "savory",
+      "herby"
+    ],
+    "equipment": [
+      "muffin tin",
+      "oven"
+    ],
+    "activeTimeMinutes": 15,
+    "totalTimeMinutes": 35,
+    "servings": 6,
+    "ingredients": [
+      {
+        "name": "eggs",
+        "quantity": 10,
+        "unit": "",
+        "category": "dairy"
+      },
+      {
+        "name": "baby spinach",
+        "quantity": 2,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "produce"
+      },
+      {
+        "name": "feta",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "crumbled",
+        "category": "dairy"
+      },
+      {
+        "name": "milk",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "dill",
+        "quantity": 2,
+        "unit": "tbsp",
+        "prep": "chopped",
+        "category": "produce",
+        "optional": true
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Whisk eggs with milk, salt, pepper, and dill."
+      },
+      {
+        "order": 2,
+        "text": "Divide spinach and feta among greased muffin cups."
+      },
+      {
+        "order": 3,
+        "text": "Pour egg mixture over top and bake at 350°F until set, about 18 minutes."
+      }
+    ],
+    "storageNotes": "Refrigerate up to 4 days or freeze up to 2 months.",
+    "reheatNotes": "Microwave 20-30 seconds from refrigerated.",
+    "prepAheadNotes": "Bake once for grab-and-go breakfasts.",
+    "toddlerTip": "Cut into strips and serve with fruit.",
+    "glucoseTip": "Pair with berries instead of toast for lower carbs.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    },
+    "nutrition": {
+      "calories": 180,
+      "protein": 14,
+      "carbs": 3,
+      "fats": 12
+    }
+  },
+  {
+    "title": "Salmon with Lemon Dill Yogurt and Green Beans",
+    "cuisine": "Mediterranean",
+    "region": "Mediterranean-inspired",
+    "mealTypes": [
+      "dinner"
+    ],
+    "dietTags": [
+      "high-protein",
+      "pescatarian"
+    ],
+    "flavorTags": [
+      "lemony",
+      "creamy",
+      "fresh"
+    ],
+    "equipment": [
+      "sheet pan",
+      "small bowl"
+    ],
+    "activeTimeMinutes": 15,
+    "totalTimeMinutes": 30,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "salmon fillets",
+        "quantity": 4,
+        "unit": "",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "green beans",
+        "quantity": 1,
+        "unit": "lb",
+        "prep": "trimmed",
+        "category": "produce"
+      },
+      {
+        "name": "Greek yogurt",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "",
+        "prep": "zested and juiced",
+        "category": "produce"
+      },
+      {
+        "name": "dill",
+        "quantity": 2,
+        "unit": "tbsp",
+        "prep": "chopped",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Place salmon and green beans on a sheet pan; season with olive oil, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Roast at 400°F until salmon flakes easily, about 12-15 minutes."
+      },
+      {
+        "order": 3,
+        "text": "Mix yogurt with lemon and dill; spoon over salmon."
+      }
+    ],
+    "storageNotes": "Best eaten within 2 days.",
+    "reheatNotes": "Reheat gently or eat salmon cold over salad.",
+    "prepAheadNotes": "Mix yogurt sauce up to 3 days ahead.",
+    "toddlerTip": "Flake salmon carefully and check for bones.",
+    "glucoseTip": "Add a small roasted potato if needed; otherwise keep it vegetable-forward.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    },
+    "nutrition": {
+      "calories": 480,
+      "protein": 45,
+      "carbs": 10,
+      "fats": 25
+    }
+  },
+  {
+    "title": "White Bean Tuna Toasts",
+    "cuisine": "Mediterranean",
+    "region": "Italian-inspired",
+    "mealTypes": [
+      "lunch"
+    ],
+    "dietTags": [
+      "high-protein",
+      "pescatarian"
+    ],
+    "flavorTags": [
+      "lemony",
+      "briny",
+      "quick"
+    ],
+    "equipment": [
+      "mixing bowl",
+      "toaster"
+    ],
+    "activeTimeMinutes": 15,
+    "totalTimeMinutes": 15,
+    "servings": 3,
+    "ingredients": [
+      {
+        "name": "canned tuna",
+        "quantity": 2,
+        "unit": "can",
+        "prep": "drained",
+        "category": "canned goods"
+      },
+      {
+        "name": "white beans",
+        "quantity": 1,
+        "unit": "can",
+        "prep": "drained and rinsed",
+        "category": "canned goods"
+      },
+      {
+        "name": "whole grain bread",
+        "quantity": 6,
+        "unit": "slice",
+        "category": "bakery"
+      },
+      {
+        "name": "lemon juice",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "capers",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry",
+        "optional": true
+      },
+      {
+        "name": "arugula",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Mash half the beans with lemon juice, olive oil, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Fold in tuna, remaining beans, and capers."
+      },
+      {
+        "order": 3,
+        "text": "Serve on toast with arugula."
+      }
+    ],
+    "storageNotes": "Tuna-bean mixture keeps 2 days refrigerated.",
+    "prepAheadNotes": "Make the tuna-bean mixture ahead; toast bread before serving.",
+    "toddlerTip": "Serve tuna-bean mash with crackers or cucumber rounds.",
+    "glucoseTip": "Use one toast and extra arugula or cucumber.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    },
+    "nutrition": {
+      "calories": 420,
+      "protein": 40,
+      "carbs": 30,
+      "fats": 8
+    }
+  },
+  {
+    "title": "Lentil Vegetable Soup",
+    "cuisine": "Mediterranean",
+    "region": "Mediterranean-inspired",
+    "mealTypes": [
+      "lunch",
+      "dinner"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-fiber"
+    ],
+    "flavorTags": [
+      "cozy",
+      "tomatoey",
+      "herby"
+    ],
+    "equipment": [
+      "Dutch oven"
+    ],
+    "activeTimeMinutes": 20,
+    "totalTimeMinutes": 55,
+    "servings": 6,
+    "ingredients": [
+      {
+        "name": "brown lentils",
+        "quantity": 1.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "carrots",
+        "quantity": 3,
+        "unit": "",
+        "prep": "diced",
+        "category": "produce"
+      },
+      {
+        "name": "celery",
+        "quantity": 3,
+        "unit": "stalk",
+        "prep": "diced",
+        "category": "produce"
+      },
+      {
+        "name": "onion",
+        "quantity": 1,
+        "unit": "",
+        "prep": "diced",
+        "category": "produce"
+      },
+      {
+        "name": "crushed tomatoes",
+        "quantity": 1,
+        "unit": "can",
+        "category": "canned goods"
+      },
+      {
+        "name": "vegetable broth",
+        "quantity": 6,
+        "unit": "cup",
+        "category": "pantry"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Sauté onion, carrots, and celery in olive oil until softened."
+      },
+      {
+        "order": 2,
+        "text": "Add lentils, tomatoes, broth, oregano, salt, and pepper."
+      },
+      {
+        "order": 3,
+        "text": "Simmer until lentils are tender, about 35 minutes."
+      }
+    ],
+    "storageNotes": "Keeps 5 days refrigerated and freezes well.",
+    "reheatNotes": "Reheat with a splash of broth or water.",
+    "prepAheadNotes": "Chop the vegetables ahead or cook the full soup for batch lunches.",
+    "toddlerTip": "Blend a portion for a smoother texture.",
+    "glucoseTip": "Pair with salad and keep bread portions modest.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    },
+    "nutrition": {
+      "calories": 220,
+      "protein": 14,
+      "carbs": 35,
+      "fats": 2
+    }
+  },
+  {
+    "title": "Chicken Shawarma Sheet Pan Dinner",
+    "cuisine": "Mediterranean",
+    "region": "Middle Eastern-inspired",
+    "mealTypes": [
+      "dinner"
+    ],
+    "dietTags": [
+      "high-protein"
+    ],
+    "flavorTags": [
+      "spiced",
+      "garlicky",
+      "roasty"
+    ],
+    "equipment": [
+      "sheet pan",
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 20,
+    "totalTimeMinutes": 45,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "chicken thighs",
+        "quantity": 1.5,
+        "unit": "lb",
+        "prep": "boneless skinless",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "red onion",
+        "quantity": 1,
+        "unit": "",
+        "prep": "sliced",
+        "category": "produce"
+      },
+      {
+        "name": "bell peppers",
+        "quantity": 2,
+        "unit": "",
+        "prep": "sliced",
+        "category": "produce"
+      },
+      {
+        "name": "Greek yogurt",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "shawarma spice blend",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "spices"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Toss chicken with olive oil, lemon, garlic, shawarma spices, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Spread chicken, onion, and peppers on a sheet pan."
+      },
+      {
+        "order": 3,
+        "text": "Roast at 425°F until chicken is browned and cooked through, about 25 minutes."
+      }
+    ],
+    "storageNotes": "Keeps 4 days refrigerated.",
+    "reheatNotes": "Reheat in skillet or microwave; add yogurt sauce after warming.",
+    "prepAheadNotes": "Marinate chicken up to 24 hours ahead.",
+    "toddlerTip": "Use mild spice and serve chicken with pita or rice.",
+    "glucoseTip": "Serve over salad or cauliflower rice.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    },
+    "nutrition": {
+      "calories": 450,
+      "protein": 38,
+      "carbs": 12,
+      "fats": 22
+    }
+  },
+  {
+    "title": "Hummus Veggie Snack Plate",
+    "cuisine": "Mediterranean",
+    "region": "Mediterranean-inspired",
+    "mealTypes": [
+      "snack",
+      "lunch"
+    ],
+    "dietTags": [
+      "vegetarian"
+    ],
+    "flavorTags": [
+      "crunchy",
+      "creamy",
+      "quick"
+    ],
+    "equipment": [
+      "knife"
+    ],
+    "activeTimeMinutes": 10,
+    "totalTimeMinutes": 10,
+    "servings": 2,
+    "ingredients": [
+      {
+        "name": "hummus",
+        "quantity": 0.75,
+        "unit": "cup",
+        "category": "deli"
+      },
+      {
+        "name": "carrots",
+        "quantity": 2,
+        "unit": "",
+        "prep": "cut into sticks",
+        "category": "produce"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "",
+        "prep": "sliced",
+        "category": "produce"
+      },
+      {
+        "name": "whole wheat pita",
+        "quantity": 1,
+        "unit": "",
+        "prep": "cut into wedges",
+        "category": "bakery"
+      },
+      {
+        "name": "olives",
+        "quantity": 0.25,
+        "unit": "cup",
+        "category": "pantry",
+        "optional": true
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Arrange hummus, vegetables, pita, and olives on a plate or lunch container."
+      }
+    ],
+    "storageNotes": "Cut vegetables keep 3 days refrigerated.",
+    "prepAheadNotes": "Portion hummus and vegetables into containers for quick snacks.",
+    "toddlerTip": "Use soft pita strips and thin cucumber slices.",
+    "glucoseTip": "Use more vegetables and fewer pita wedges.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    },
+    "nutrition": {
+      "calories": 350,
+      "protein": 10,
+      "carbs": 40,
+      "fats": 12
+    }
+  },
+  {
+    "title": "Mediterranean Yogurt Parfait",
+    "cuisine": "Mediterranean",
+    "region": "Mediterranean-inspired",
+    "mealTypes": [
+      "breakfast",
+      "snack"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-protein"
+    ],
+    "flavorTags": [
+      "creamy",
+      "fruity",
+      "quick"
+    ],
+    "equipment": [
+      "bowl"
+    ],
+    "activeTimeMinutes": 5,
+    "totalTimeMinutes": 5,
+    "servings": 1,
+    "ingredients": [
+      {
+        "name": "Greek yogurt",
+        "quantity": 0.75,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "berries",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "walnuts",
+        "quantity": 2,
+        "unit": "tbsp",
+        "prep": "chopped",
+        "category": "pantry"
+      },
+      {
+        "name": "honey",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "pantry",
+        "optional": true
+      },
+      {
+        "name": "cinnamon",
+        "quantity": 0.25,
+        "unit": "tsp",
+        "category": "spices"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Spoon yogurt into a bowl and top with berries, walnuts, honey, and cinnamon."
+      }
+    ],
+    "storageNotes": "Best assembled fresh; pre-portion toppings separately.",
+    "prepAheadNotes": "Wash berries and portion nuts ahead.",
+    "toddlerTip": "Skip whole nuts for young toddlers; use ground nuts or seed butter if appropriate.",
+    "glucoseTip": "Use minimal honey and add extra walnuts for satiety.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    },
+    "nutrition": {
+      "calories": 280,
+      "protein": 20,
+      "carbs": 20,
+      "fats": 12
+    }
+  },
+  {
+    "title": "Turkey Stuffed Peppers with Feta",
+    "cuisine": "Mediterranean",
+    "region": "Mediterranean-inspired",
+    "mealTypes": [
+      "dinner"
+    ],
+    "dietTags": [
+      "high-protein"
+    ],
+    "flavorTags": [
+      "tomatoey",
+      "savory",
+      "herby"
+    ],
+    "equipment": [
+      "baking dish",
+      "skillet"
+    ],
+    "activeTimeMinutes": 30,
+    "totalTimeMinutes": 60,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "bell peppers",
+        "quantity": 4,
+        "unit": "",
+        "prep": "halved and seeded",
+        "category": "produce"
+      },
+      {
+        "name": "ground turkey",
+        "quantity": 1,
+        "unit": "lb",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "cooked quinoa",
+        "quantity": 1.5,
+        "unit": "cup",
+        "category": "grains"
+      },
+      {
+        "name": "crushed tomatoes",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "canned goods"
+      },
+      {
+        "name": "feta",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "crumbled",
+        "category": "dairy"
+      },
+      {
+        "name": "spinach",
+        "quantity": 2,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Brown turkey in a skillet with garlic, oregano, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Stir in quinoa, tomatoes, spinach, and half the feta."
+      },
+      {
+        "order": 3,
+        "text": "Fill pepper halves, top with remaining feta, and bake at 375°F until peppers are tender."
+      }
+    ],
+    "storageNotes": "Keeps 4 days refrigerated.",
+    "reheatNotes": "Microwave or bake covered until warmed through.",
+    "prepAheadNotes": "Assemble peppers up to 24 hours before baking.",
+    "toddlerTip": "Chop cooked pepper and filling into bite-size pieces.",
+    "glucoseTip": "Use less quinoa and more spinach in the filling.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    },
+    "nutrition": {
+      "calories": 460,
+      "protein": 40,
+      "carbs": 30,
+      "fats": 12
+    }
+  },
+  {
+    "title": "Herby Cottage Cheese Cucumber Toasts",
+    "cuisine": "Mediterranean",
+    "region": "Mediterranean-inspired",
+    "mealTypes": [
+      "breakfast",
+      "lunch"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-protein"
+    ],
+    "flavorTags": [
+      "herby",
+      "crunchy",
+      "quick"
+    ],
+    "equipment": [
+      "toaster",
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 10,
+    "totalTimeMinutes": 10,
+    "servings": 2,
+    "nutrition": {
+      "calories": 310,
+      "protein": 22,
+      "carbs": 30,
+      "fats": 12
+    },
+    "ingredients": [
+      {
+        "name": "whole grain bread",
+        "quantity": 4,
+        "unit": "slice",
+        "category": "bakery"
+      },
+      {
+        "name": "cottage cheese",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 0.5,
+        "unit": "",
+        "prep": "thinly sliced",
+        "category": "produce"
+      },
+      {
+        "name": "dill",
+        "quantity": 2,
+        "unit": "tbsp",
+        "prep": "chopped",
+        "category": "produce"
+      },
+      {
+        "name": "lemon juice",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "everything seasoning",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spices",
+        "optional": true
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Toast bread until crisp."
+      },
+      {
+        "order": 2,
+        "text": "Stir cottage cheese with dill, lemon juice, pepper, and a pinch of salt."
+      },
+      {
+        "order": 3,
+        "text": "Spread cottage cheese on toast and top with cucumber and seasoning."
+      }
+    ],
+    "storageNotes": "Best assembled fresh; cottage cheese mixture keeps 2 days.",
+    "reheatNotes": "Toast bread fresh before serving.",
+    "prepAheadNotes": "Mix the herbed cottage cheese and slice cucumber the night before.",
+    "toddlerTip": "Cut toast into strips or serve cottage cheese and cucumber separately.",
+    "glucoseTip": "Use one slice of toast and add extra cucumber or tomato.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Tomato Cucumber Farro Salad with Feta",
+    "cuisine": "Mediterranean",
+    "region": "Greek-inspired",
+    "mealTypes": [
+      "lunch",
+      "dinner"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-fiber"
+    ],
+    "flavorTags": [
+      "fresh",
+      "lemony",
+      "make-ahead"
+    ],
+    "equipment": [
+      "saucepan",
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 20,
+    "totalTimeMinutes": 35,
+    "servings": 4,
+    "nutrition": {
+      "calories": 390,
+      "protein": 14,
+      "carbs": 55,
+      "fats": 14
+    },
+    "ingredients": [
+      {
+        "name": "farro",
+        "quantity": 1,
+        "unit": "cup",
+        "prep": "dry",
+        "category": "grains"
+      },
+      {
+        "name": "cherry tomatoes",
+        "quantity": 1,
+        "unit": "pint",
+        "prep": "halved",
+        "category": "produce"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "",
+        "prep": "diced",
+        "category": "produce"
+      },
+      {
+        "name": "feta",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "crumbled",
+        "category": "dairy"
+      },
+      {
+        "name": "parsley",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "produce"
+      },
+      {
+        "name": "lemon juice",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Cook farro according to package directions, then cool slightly."
+      },
+      {
+        "order": 2,
+        "text": "Whisk lemon juice, olive oil, oregano, salt, and pepper."
+      },
+      {
+        "order": 3,
+        "text": "Toss farro with tomatoes, cucumber, parsley, feta, and dressing."
+      }
+    ],
+    "storageNotes": "Keeps 4 days refrigerated.",
+    "prepAheadNotes": "Cook farro and chop vegetables ahead; toss with dressing before packing.",
+    "toddlerTip": "Serve farro, cucumber, and feta in small separate piles.",
+    "glucoseTip": "Add grilled chicken or chickpeas and keep farro to a smaller portion.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Turkey Spinach Meatballs with Orzo",
+    "cuisine": "Mediterranean",
+    "region": "Greek-inspired",
+    "mealTypes": [
+      "dinner"
+    ],
+    "dietTags": [
+      "high-protein"
+    ],
+    "flavorTags": [
+      "herby",
+      "comforting",
+      "family-friendly"
+    ],
+    "equipment": [
+      "sheet pan",
+      "saucepan",
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 25,
+    "totalTimeMinutes": 45,
+    "servings": 4,
+    "nutrition": {
+      "calories": 540,
+      "protein": 40,
+      "carbs": 48,
+      "fats": 21
+    },
+    "ingredients": [
+      {
+        "name": "ground turkey",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "baby spinach",
+        "quantity": 2,
+        "unit": "cup",
+        "prep": "finely chopped",
+        "category": "produce"
+      },
+      {
+        "name": "egg",
+        "quantity": 1,
+        "unit": "",
+        "category": "dairy"
+      },
+      {
+        "name": "breadcrumbs",
+        "quantity": 0.33,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "orzo",
+        "quantity": 1,
+        "unit": "cup",
+        "prep": "dry",
+        "category": "grains"
+      },
+      {
+        "name": "Greek yogurt",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "",
+        "prep": "zested and juiced",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Mix turkey, spinach, egg, breadcrumbs, garlic, oregano, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Shape into meatballs and bake at 425°F until cooked through, about 18 minutes."
+      },
+      {
+        "order": 3,
+        "text": "Cook orzo and serve with meatballs and lemon yogurt sauce."
+      }
+    ],
+    "storageNotes": "Meatballs and orzo keep 4 days refrigerated.",
+    "reheatNotes": "Reheat meatballs and orzo; add yogurt sauce after warming.",
+    "prepAheadNotes": "Shape meatballs up to a day ahead or freeze uncooked on a tray.",
+    "toddlerTip": "Cut meatballs into quarters and serve sauce for dipping.",
+    "glucoseTip": "Swap half the orzo for roasted zucchini or salad.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Shrimp Zucchini Skillet with Tomatoes",
+    "cuisine": "Mediterranean",
+    "region": "Italian-inspired",
+    "mealTypes": [
+      "dinner"
+    ],
+    "dietTags": [
+      "high-protein",
+      "pescatarian",
+      "low-carb"
+    ],
+    "flavorTags": [
+      "garlicky",
+      "quick",
+      "tomatoey"
+    ],
+    "equipment": [
+      "large skillet"
+    ],
+    "activeTimeMinutes": 20,
+    "totalTimeMinutes": 25,
+    "servings": 4,
+    "nutrition": {
+      "calories": 310,
+      "protein": 32,
+      "carbs": 18,
+      "fats": 13
+    },
+    "ingredients": [
+      {
+        "name": "shrimp",
+        "quantity": 1.25,
+        "unit": "lb",
+        "prep": "peeled and deveined",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "zucchini",
+        "quantity": 3,
+        "unit": "",
+        "prep": "sliced into half moons",
+        "category": "produce"
+      },
+      {
+        "name": "cherry tomatoes",
+        "quantity": 1,
+        "unit": "pint",
+        "prep": "halved",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "clove",
+        "prep": "minced",
+        "category": "produce"
+      },
+      {
+        "name": "feta",
+        "quantity": 0.33,
+        "unit": "cup",
+        "prep": "crumbled",
+        "category": "dairy",
+        "optional": true
+      },
+      {
+        "name": "basil",
+        "quantity": 0.25,
+        "unit": "cup",
+        "prep": "torn",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Sauté zucchini in olive oil until lightly browned."
+      },
+      {
+        "order": 2,
+        "text": "Add garlic and tomatoes; cook until tomatoes soften."
+      },
+      {
+        "order": 3,
+        "text": "Add shrimp and cook until pink, then finish with basil and feta."
+      }
+    ],
+    "storageNotes": "Best within 2 days refrigerated.",
+    "reheatNotes": "Reheat gently to avoid tough shrimp.",
+    "prepAheadNotes": "Slice zucchini and tomatoes ahead; cook shrimp right before serving.",
+    "toddlerTip": "Chop shrimp finely and serve zucchini soft.",
+    "glucoseTip": "Serve as-is or over cauliflower rice for a lower-carb dinner.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Roasted Red Pepper Hummus Turkey Wraps",
+    "cuisine": "Mediterranean",
+    "region": "Mediterranean-inspired",
+    "mealTypes": [
+      "lunch"
+    ],
+    "dietTags": [
+      "high-protein"
+    ],
+    "flavorTags": [
+      "creamy",
+      "crunchy",
+      "packable"
+    ],
+    "equipment": [
+      "knife"
+    ],
+    "activeTimeMinutes": 15,
+    "totalTimeMinutes": 15,
+    "servings": 4,
+    "nutrition": {
+      "calories": 430,
+      "protein": 28,
+      "carbs": 42,
+      "fats": 17
+    },
+    "ingredients": [
+      {
+        "name": "whole wheat tortillas",
+        "quantity": 4,
+        "unit": "",
+        "category": "bakery"
+      },
+      {
+        "name": "sliced turkey",
+        "quantity": 12,
+        "unit": "oz",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "roasted red pepper hummus",
+        "quantity": 0.75,
+        "unit": "cup",
+        "category": "deli"
+      },
+      {
+        "name": "romaine",
+        "quantity": 2,
+        "unit": "cup",
+        "prep": "shredded",
+        "category": "produce"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "",
+        "prep": "cut into matchsticks",
+        "category": "produce"
+      },
+      {
+        "name": "roasted red peppers",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "sliced",
+        "category": "pantry"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Spread hummus over each tortilla."
+      },
+      {
+        "order": 2,
+        "text": "Layer turkey, romaine, cucumber, and roasted red peppers."
+      },
+      {
+        "order": 3,
+        "text": "Roll tightly and slice in half for lunch boxes."
+      }
+    ],
+    "storageNotes": "Wraps keep 1 day; pack tightly to prevent drying.",
+    "prepAheadNotes": "Slice vegetables and portion hummus ahead; assemble the morning of eating.",
+    "toddlerTip": "Make pinwheels or serve turkey and vegetables deconstructed.",
+    "glucoseTip": "Use a low-carb tortilla or make lettuce wraps with extra turkey.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Date-Tahini Overnight Oats",
+    "cuisine": "Mediterranean",
+    "region": "Levant-inspired",
+    "mealTypes": [
+      "breakfast"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "make-ahead",
+      "high-fiber"
+    ],
+    "flavorTags": [
+      "nutty",
+      "cinnamon",
+      "lightly sweet"
+    ],
+    "equipment": [
+      "mixing bowl",
+      "jars"
+    ],
+    "activeTimeMinutes": 10,
+    "totalTimeMinutes": 480,
+    "servings": 4,
+    "nutrition": {
+      "calories": 360,
+      "protein": 15,
+      "carbs": 50,
+      "fats": 13
+    },
+    "ingredients": [
+      {
+        "name": "old-fashioned oats",
+        "quantity": 2,
+        "unit": "cups",
+        "category": "grains"
+      },
+      {
+        "name": "plain Greek yogurt",
+        "quantity": 1.5,
+        "unit": "cups",
+        "category": "dairy"
+      },
+      {
+        "name": "milk",
+        "quantity": 1.5,
+        "unit": "cups",
+        "category": "dairy"
+      },
+      {
+        "name": "tahini",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "dates",
+        "quantity": 6,
+        "unit": "",
+        "prep": "pitted and chopped",
+        "category": "produce"
+      },
+      {
+        "name": "chia seeds",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "cinnamon",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spices"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Whisk yogurt, milk, tahini, chia seeds, cinnamon, and a pinch of salt until smooth."
+      },
+      {
+        "order": 2,
+        "text": "Stir in oats and chopped dates, then divide among jars."
+      },
+      {
+        "order": 3,
+        "text": "Refrigerate overnight; loosen with a splash of milk before serving."
+      }
+    ],
+    "storageNotes": "Keeps refrigerated up to 4 days.",
+    "reheatNotes": "Serve cold or gently warm with extra milk.",
+    "prepAheadNotes": "Assemble jars on prep day for grab-and-go breakfasts.",
+    "toddlerTip": "Chop dates very small and thin with extra milk for younger toddlers.",
+    "glucoseTip": "Top with walnuts and keep dates modest for steadier carbs.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Spinach Feta Egg Muffins",
+    "cuisine": "Mediterranean",
+    "region": "Greek-inspired",
+    "mealTypes": [
+      "breakfast",
+      "snack"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-protein",
+      "make-ahead"
+    ],
+    "flavorTags": [
+      "savory",
+      "herby",
+      "tangy"
+    ],
+    "equipment": [
+      "muffin tin",
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 15,
+    "totalTimeMinutes": 30,
+    "servings": 6,
+    "nutrition": {
+      "calories": 210,
+      "protein": 16,
+      "carbs": 5,
+      "fats": 14
+    },
+    "ingredients": [
+      {
+        "name": "eggs",
+        "quantity": 12,
+        "unit": "",
+        "category": "dairy"
+      },
+      {
+        "name": "baby spinach",
+        "quantity": 2,
+        "unit": "cups",
+        "prep": "chopped",
+        "category": "produce"
+      },
+      {
+        "name": "feta cheese",
+        "quantity": 0.75,
+        "unit": "cup",
+        "prep": "crumbled",
+        "category": "dairy"
+      },
+      {
+        "name": "roasted red peppers",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "diced",
+        "category": "canned goods"
+      },
+      {
+        "name": "fresh dill",
+        "quantity": 2,
+        "unit": "tbsp",
+        "prep": "chopped",
+        "category": "produce"
+      },
+      {
+        "name": "dried oregano",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spices"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Preheat oven to 350°F and grease a 12-cup muffin tin."
+      },
+      {
+        "order": 2,
+        "text": "Whisk eggs with dill, oregano, salt, and pepper; fold in spinach, feta, and roasted peppers."
+      },
+      {
+        "order": 3,
+        "text": "Divide into muffin cups and bake 16–18 minutes until just set."
+      }
+    ],
+    "storageNotes": "Refrigerate up to 4 days or freeze up to 2 months.",
+    "reheatNotes": "Microwave 20–30 seconds from fridge or thaw overnight from frozen.",
+    "prepAheadNotes": "Bake on prep day for quick breakfasts or snack boxes.",
+    "toddlerTip": "Cut into strips and serve with fruit.",
+    "glucoseTip": "Pair with berries or cucumber instead of toast for a lower-carb plate.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Labneh Berry Toasts",
+    "cuisine": "Mediterranean",
+    "region": "Eastern Mediterranean-inspired",
+    "mealTypes": [
+      "breakfast"
+    ],
+    "dietTags": [
+      "vegetarian"
+    ],
+    "flavorTags": [
+      "creamy",
+      "bright",
+      "lightly sweet"
+    ],
+    "equipment": [
+      "toaster"
+    ],
+    "activeTimeMinutes": 8,
+    "totalTimeMinutes": 8,
+    "servings": 2,
+    "nutrition": {
+      "calories": 310,
+      "protein": 15,
+      "carbs": 36,
+      "fats": 12
+    },
+    "ingredients": [
+      {
+        "name": "whole grain bread",
+        "quantity": 4,
+        "unit": "slices",
+        "category": "bakery"
+      },
+      {
+        "name": "labneh",
+        "quantity": 0.75,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "blueberries",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "pistachios",
+        "quantity": 3,
+        "unit": "tbsp",
+        "prep": "chopped",
+        "category": "nuts"
+      },
+      {
+        "name": "honey",
+        "quantity": 2,
+        "unit": "tsp",
+        "category": "pantry"
+      },
+      {
+        "name": "lemon zest",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Toast bread until sturdy and lightly crisp."
+      },
+      {
+        "order": 2,
+        "text": "Spread each slice with labneh and scatter blueberries over the top."
+      },
+      {
+        "order": 3,
+        "text": "Finish with pistachios, lemon zest, and a very light honey drizzle."
+      }
+    ],
+    "storageNotes": "Best assembled fresh; keep labneh and toppings separate.",
+    "reheatNotes": "Toast bread fresh before assembling.",
+    "prepAheadNotes": "Wash berries and chop pistachios ahead.",
+    "toddlerTip": "Skip honey for children under 12 months; cut toast into fingers.",
+    "glucoseTip": "Use one slice plus extra labneh and berries for a smaller carb portion.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Cucumber Hummus Snack Plates",
+    "cuisine": "Mediterranean",
+    "region": "Levant-inspired",
+    "mealTypes": [
+      "snack",
+      "lunch"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-fiber",
+      "no-cook"
+    ],
+    "flavorTags": [
+      "creamy",
+      "crunchy",
+      "lemony"
+    ],
+    "equipment": [
+      "cutting board"
+    ],
+    "activeTimeMinutes": 10,
+    "totalTimeMinutes": 10,
+    "servings": 4,
+    "nutrition": {
+      "calories": 260,
+      "protein": 10,
+      "carbs": 30,
+      "fats": 12
+    },
+    "ingredients": [
+      {
+        "name": "hummus",
+        "quantity": 1.5,
+        "unit": "cups",
+        "category": "deli"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 2,
+        "unit": "",
+        "prep": "sliced into spears",
+        "category": "produce"
+      },
+      {
+        "name": "baby carrots",
+        "quantity": 2,
+        "unit": "cups",
+        "category": "produce"
+      },
+      {
+        "name": "whole wheat pita",
+        "quantity": 2,
+        "unit": "",
+        "prep": "cut into triangles",
+        "category": "bakery"
+      },
+      {
+        "name": "feta cheese",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "crumbled",
+        "category": "dairy"
+      },
+      {
+        "name": "zaatar",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spices"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Spoon hummus into small bowls and dust with zaatar."
+      },
+      {
+        "order": 2,
+        "text": "Arrange cucumber spears, carrots, pita triangles, and feta around the hummus."
+      },
+      {
+        "order": 3,
+        "text": "Pack in divided containers if using for lunch boxes."
+      }
+    ],
+    "storageNotes": "Pack vegetables and pita separately from hummus up to 3 days.",
+    "reheatNotes": "No reheating needed.",
+    "prepAheadNotes": "Slice cucumbers and portion hummus on prep day.",
+    "toddlerTip": "Use soft pita strips and thin cucumber half-moons for easier biting.",
+    "glucoseTip": "Lean into vegetables and feta; use fewer pita triangles.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Apricot Pistachio Yogurt Cups",
+    "cuisine": "Mediterranean",
+    "region": "Turkish-inspired",
+    "mealTypes": [
+      "snack",
+      "breakfast"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-protein",
+      "no-cook"
+    ],
+    "flavorTags": [
+      "creamy",
+      "fruity",
+      "nutty"
+    ],
+    "equipment": [
+      "small bowls"
+    ],
+    "activeTimeMinutes": 7,
+    "totalTimeMinutes": 7,
+    "servings": 4,
+    "nutrition": {
+      "calories": 240,
+      "protein": 18,
+      "carbs": 24,
+      "fats": 9
+    },
+    "ingredients": [
+      {
+        "name": "plain Greek yogurt",
+        "quantity": 3,
+        "unit": "cups",
+        "category": "dairy"
+      },
+      {
+        "name": "dried apricots",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "finely chopped",
+        "category": "dried fruit"
+      },
+      {
+        "name": "pistachios",
+        "quantity": 0.33,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "nuts"
+      },
+      {
+        "name": "cinnamon",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "category": "spices"
+      },
+      {
+        "name": "orange zest",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Divide Greek yogurt among four cups."
+      },
+      {
+        "order": 2,
+        "text": "Top with chopped apricots, pistachios, cinnamon, and orange zest."
+      },
+      {
+        "order": 3,
+        "text": "Serve immediately or cover and refrigerate for snack boxes."
+      }
+    ],
+    "storageNotes": "Keeps covered up to 3 days; pistachios soften slightly.",
+    "reheatNotes": "Serve chilled.",
+    "prepAheadNotes": "Chop apricots and pistachios ahead, or assemble cups fully.",
+    "toddlerTip": "Finely mince apricots and pistachios or swap nuts for seed butter swirl if needed.",
+    "glucoseTip": "Use fewer apricots and extra pistachios for a lower-sugar cup.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "White Bean Rosemary Crostini",
+    "cuisine": "Mediterranean",
+    "region": "Italian-inspired",
+    "mealTypes": [
+      "snack",
+      "lunch"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-fiber"
+    ],
+    "flavorTags": [
+      "creamy",
+      "garlicky",
+      "herby"
+    ],
+    "equipment": [
+      "food processor",
+      "toaster"
+    ],
+    "activeTimeMinutes": 15,
+    "totalTimeMinutes": 15,
+    "servings": 4,
+    "nutrition": {
+      "calories": 290,
+      "protein": 12,
+      "carbs": 38,
+      "fats": 10
+    },
+    "ingredients": [
+      {
+        "name": "cannellini beans",
+        "quantity": 2,
+        "unit": "can",
+        "prep": "drained and rinsed",
+        "category": "canned goods"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "lemon juice",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 1,
+        "unit": "clove",
+        "prep": "minced",
+        "category": "produce"
+      },
+      {
+        "name": "fresh rosemary",
+        "quantity": 1,
+        "unit": "tsp",
+        "prep": "finely chopped",
+        "category": "produce"
+      },
+      {
+        "name": "whole grain baguette",
+        "quantity": 12,
+        "unit": "slices",
+        "category": "bakery"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Blend beans, olive oil, lemon juice, garlic, rosemary, salt, and pepper until mostly smooth."
+      },
+      {
+        "order": 2,
+        "text": "Toast baguette slices until crisp on the edges."
+      },
+      {
+        "order": 3,
+        "text": "Spread bean mash on toast and finish with a tiny drizzle of olive oil."
+      }
+    ],
+    "storageNotes": "Bean spread keeps refrigerated up to 4 days; toast bread fresh.",
+    "reheatNotes": "Toast bread before serving; bean spread can be served cool or room temperature.",
+    "prepAheadNotes": "Make the bean spread on prep day for fast snacks or lunches.",
+    "toddlerTip": "Serve bean spread as a dip with soft pita instead of crisp toast.",
+    "glucoseTip": "Use cucumber rounds as dippers instead of some toast slices.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Lemon Oregano Cod with Tomato Olive Relish",
+    "cuisine": "Mediterranean",
+    "region": "Greek-inspired",
+    "mealTypes": [
+      "dinner"
+    ],
+    "dietTags": [
+      "high-protein",
+      "pescatarian"
+    ],
+    "flavorTags": [
+      "lemony",
+      "briny",
+      "herby"
+    ],
+    "equipment": [
+      "sheet pan",
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 18,
+    "totalTimeMinutes": 30,
+    "servings": 4,
+    "nutrition": {
+      "calories": 360,
+      "protein": 36,
+      "carbs": 20,
+      "fats": 16
+    },
+    "ingredients": [
+      {
+        "name": "cod fillets",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "",
+        "prep": "zested and juiced",
+        "category": "produce"
+      },
+      {
+        "name": "dried oregano",
+        "quantity": 1.5,
+        "unit": "tsp",
+        "category": "spices"
+      },
+      {
+        "name": "garlic",
+        "quantity": 2,
+        "unit": "cloves",
+        "prep": "minced",
+        "category": "produce"
+      },
+      {
+        "name": "cherry tomatoes",
+        "quantity": 1.5,
+        "unit": "cups",
+        "prep": "quartered",
+        "category": "produce"
+      },
+      {
+        "name": "kalamata olives",
+        "quantity": 0.33,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "deli"
+      },
+      {
+        "name": "fresh parsley",
+        "quantity": 0.25,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "produce"
+      },
+      {
+        "name": "whole wheat couscous",
+        "quantity": 2,
+        "unit": "cups",
+        "prep": "cooked",
+        "category": "grains"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Heat oven to 400°F. Rub cod with 1 tbsp olive oil, lemon zest, oregano, garlic, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Bake cod on a sheet pan for 10–12 minutes until it flakes easily with a fork."
+      },
+      {
+        "order": 3,
+        "text": "Stir tomatoes, olives, parsley, lemon juice, and remaining olive oil into a quick relish."
+      },
+      {
+        "order": 4,
+        "text": "Serve cod over warm couscous with tomato olive relish spooned on top."
+      }
+    ],
+    "storageNotes": "Cooked cod is best within 2 days; relish keeps 3 days separately.",
+    "reheatNotes": "Reheat cod gently at low power or serve room temperature over warm couscous.",
+    "prepAheadNotes": "Chop relish vegetables and cook couscous up to 2 days ahead.",
+    "toddlerTip": "Flake fish carefully and serve relish on the side for dipping or skipping.",
+    "glucoseTip": "Serve over cauliflower rice or extra cucumber salad instead of some couscous.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Moroccan Chickpea Sweet Potato Stew",
+    "cuisine": "Mediterranean",
+    "region": "Moroccan-inspired",
+    "mealTypes": [
+      "dinner",
+      "lunch"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-fiber",
+      "make-ahead"
+    ],
+    "flavorTags": [
+      "warming",
+      "spiced",
+      "tomatoey"
+    ],
+    "equipment": [
+      "dutch oven",
+      "cutting board"
+    ],
+    "activeTimeMinutes": 20,
+    "totalTimeMinutes": 38,
+    "servings": 4,
+    "nutrition": {
+      "calories": 410,
+      "protein": 15,
+      "carbs": 62,
+      "fats": 13
+    },
+    "ingredients": [
+      {
+        "name": "olive oil",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "yellow onion",
+        "quantity": 1,
+        "unit": "",
+        "prep": "diced",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "cloves",
+        "prep": "minced",
+        "category": "produce"
+      },
+      {
+        "name": "sweet potatoes",
+        "quantity": 2,
+        "unit": "medium",
+        "prep": "peeled and cubed",
+        "category": "produce"
+      },
+      {
+        "name": "chickpeas",
+        "quantity": 2,
+        "unit": "can",
+        "prep": "drained and rinsed",
+        "category": "canned goods"
+      },
+      {
+        "name": "crushed tomatoes",
+        "quantity": 1,
+        "unit": "28 oz can",
+        "category": "canned goods"
+      },
+      {
+        "name": "vegetable broth",
+        "quantity": 1.5,
+        "unit": "cups",
+        "category": "pantry"
+      },
+      {
+        "name": "ground cumin",
+        "quantity": 1.5,
+        "unit": "tsp",
+        "category": "spices"
+      },
+      {
+        "name": "smoked paprika",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "spices"
+      },
+      {
+        "name": "cinnamon",
+        "quantity": 0.25,
+        "unit": "tsp",
+        "category": "spices"
+      },
+      {
+        "name": "baby spinach",
+        "quantity": 4,
+        "unit": "cups",
+        "category": "produce"
+      },
+      {
+        "name": "plain Greek yogurt",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Warm olive oil in a Dutch oven. Sauté onion 5 minutes until soft, then bloom garlic, cumin, paprika, and cinnamon for 30 seconds."
+      },
+      {
+        "order": 2,
+        "text": "Add sweet potatoes, chickpeas, tomatoes, broth, salt, and pepper. Simmer 18–22 minutes until potatoes are tender."
+      },
+      {
+        "order": 3,
+        "text": "Fold in spinach until wilted and adjust seasoning with a squeeze of lemon if available."
+      },
+      {
+        "order": 4,
+        "text": "Serve in bowls with a spoonful of Greek yogurt for creaminess."
+      }
+    ],
+    "storageNotes": "Keeps refrigerated up to 4 days and freezes well without yogurt.",
+    "reheatNotes": "Reheat in a saucepan with a splash of broth or water.",
+    "prepAheadNotes": "Dice onion and sweet potatoes ahead; stew can be fully batch-cooked.",
+    "toddlerTip": "Mash sweet potatoes slightly and serve yogurt stirred in to mellow the spices.",
+    "glucoseTip": "Use extra spinach and a smaller sweet potato portion; add chicken if more protein is needed.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Herby Lemon Tahini Sauce",
+    "cuisine": "Mediterranean",
+    "region": "Levant-inspired",
+    "mealTypes": [
+      "snack",
+      "lunch",
+      "dinner"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "vegan",
+      "no-cook"
+    ],
+    "flavorTags": [
+      "creamy",
+      "lemony",
+      "herby"
+    ],
+    "equipment": [
+      "mixing bowl",
+      "whisk"
+    ],
+    "activeTimeMinutes": 8,
+    "totalTimeMinutes": 8,
+    "servings": 8,
+    "nutrition": {
+      "calories": 95,
+      "protein": 3,
+      "carbs": 4,
+      "fats": 8
+    },
+    "ingredients": [
+      {
+        "name": "tahini",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "lemon juice",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "water",
+        "quantity": 0.33,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "garlic",
+        "quantity": 1,
+        "unit": "clove",
+        "prep": "finely grated",
+        "category": "produce"
+      },
+      {
+        "name": "fresh parsley",
+        "quantity": 0.25,
+        "unit": "cup",
+        "prep": "finely chopped",
+        "category": "produce"
+      },
+      {
+        "name": "fresh dill",
+        "quantity": 2,
+        "unit": "tbsp",
+        "prep": "chopped",
+        "category": "produce"
+      },
+      {
+        "name": "ground cumin",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "category": "spices"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Whisk tahini, lemon juice, garlic, cumin, and a pinch of salt until thick and pale."
+      },
+      {
+        "order": 2,
+        "text": "Slowly whisk in water until the sauce turns smooth and drizzleable."
+      },
+      {
+        "order": 3,
+        "text": "Fold in parsley and dill, then taste for lemon and salt."
+      }
+    ],
+    "storageNotes": "Keeps refrigerated in a jar for 5 days; thickens as it chills.",
+    "reheatNotes": "No reheating needed; loosen with warm water before serving.",
+    "prepAheadNotes": "Make on prep day to use on bowls, wraps, roasted vegetables, and snack plates.",
+    "toddlerTip": "Serve as a dip in a small cup; thin with yogurt for a milder flavor if desired.",
+    "glucoseTip": "Use as a high-fat sauce to make vegetable-heavy bowls more satisfying without adding sugar.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Cinnamon Fig Overnight Oats",
+    "cuisine": "Mediterranean",
+    "region": "Eastern Mediterranean-inspired",
+    "mealTypes": [
+      "breakfast"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "make-ahead",
+      "high-fiber"
+    ],
+    "flavorTags": [
+      "cinnamon",
+      "fig",
+      "creamy",
+      "nutty"
+    ],
+    "equipment": [
+      "mixing bowl",
+      "jars"
+    ],
+    "activeTimeMinutes": 8,
+    "totalTimeMinutes": 480,
+    "servings": 4,
+    "nutrition": {
+      "calories": 360,
+      "protein": 16,
+      "carbs": 52,
+      "fats": 11
+    },
+    "ingredients": [
+      {
+        "name": "rolled oats",
+        "quantity": 2,
+        "unit": "cups",
+        "category": "grains"
+      },
+      {
+        "name": "plain Greek yogurt",
+        "quantity": 1.5,
+        "unit": "cups",
+        "category": "dairy"
+      },
+      {
+        "name": "milk",
+        "quantity": 1.25,
+        "unit": "cups",
+        "category": "dairy"
+      },
+      {
+        "name": "dried figs",
+        "quantity": 0.75,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "pantry"
+      },
+      {
+        "name": "chia seeds",
+        "quantity": 3,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "almonds",
+        "quantity": 0.33,
+        "unit": "cup",
+        "prep": "sliced",
+        "category": "pantry"
+      },
+      {
+        "name": "ground cinnamon",
+        "quantity": 1.5,
+        "unit": "tsp",
+        "category": "spices"
+      },
+      {
+        "name": "orange zest",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Stir oats, Greek yogurt, milk, chia seeds, cinnamon, orange zest, and a small pinch of salt in a mixing bowl until evenly combined."
+      },
+      {
+        "order": 2,
+        "text": "Fold in chopped figs so they hydrate overnight and sweeten the oats naturally."
+      },
+      {
+        "order": 3,
+        "text": "Divide into jars, cover, and refrigerate at least 8 hours or up to 4 days."
+      },
+      {
+        "order": 4,
+        "text": "Top each jar with sliced almonds just before serving for crunch."
+      }
+    ],
+    "storageNotes": "Keeps refrigerated in sealed jars up to 4 days.",
+    "reheatNotes": "Eat cold or warm gently in the microwave with an extra splash of milk.",
+    "prepAheadNotes": "Batch on Sunday night for grab-and-go breakfasts through midweek.",
+    "toddlerTip": "Chop figs very small and soften with an extra splash of milk for younger toddlers.",
+    "glucoseTip": "Pair with extra Greek yogurt or a boiled egg if you want more protein and a slower morning rise.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Lemon Oregano Salmon Tray Bake",
+    "cuisine": "Mediterranean",
+    "region": "Greek-inspired",
+    "mealTypes": [
+      "dinner"
+    ],
+    "dietTags": [
+      "high-protein",
+      "pescatarian"
+    ],
+    "flavorTags": [
+      "lemony",
+      "herby",
+      "savory"
+    ],
+    "equipment": [
+      "sheet pan",
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 15,
+    "totalTimeMinutes": 35,
+    "servings": 4,
+    "nutrition": {
+      "calories": 510,
+      "protein": 36,
+      "carbs": 34,
+      "fats": 26
+    },
+    "ingredients": [
+      {
+        "name": "salmon fillets",
+        "quantity": 1.5,
+        "unit": "lb",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "baby potatoes",
+        "quantity": 1.25,
+        "unit": "lb",
+        "prep": "halved",
+        "category": "produce"
+      },
+      {
+        "name": "green beans",
+        "quantity": 12,
+        "unit": "oz",
+        "prep": "trimmed",
+        "category": "produce"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "",
+        "prep": "zested and juiced",
+        "category": "produce"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "dried oregano",
+        "quantity": 1.5,
+        "unit": "tsp",
+        "category": "spices"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Toss potatoes with half the olive oil, oregano, salt, and pepper; roast at 425°F for 15 minutes.",
+        "timerMinutes": 15
+      },
+      {
+        "order": 2,
+        "text": "Add salmon and green beans to the sheet pan, then drizzle with remaining olive oil, lemon zest, and lemon juice."
+      },
+      {
+        "order": 3,
+        "text": "Roast until salmon flakes easily and potatoes are tender, about 12 to 15 minutes.",
+        "timerMinutes": 15
+      }
+    ],
+    "storageNotes": "Store salmon and vegetables together up to 3 days refrigerated.",
+    "reheatNotes": "Reheat gently at 300°F or serve salmon chilled over greens.",
+    "prepAheadNotes": "Halve potatoes and trim green beans up to 2 days ahead.",
+    "toddlerTip": "Flake salmon carefully and serve with soft potato pieces.",
+    "glucoseTip": "Use extra green beans and a smaller potato portion.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "url": null,
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Turkey White Bean Skillet",
+    "cuisine": "Mediterranean",
+    "region": "Italian Mediterranean-inspired",
+    "mealTypes": [
+      "dinner"
+    ],
+    "dietTags": [
+      "high-protein",
+      "high-fiber"
+    ],
+    "flavorTags": [
+      "tomatoey",
+      "garlicky",
+      "cozy"
+    ],
+    "equipment": [
+      "large skillet"
+    ],
+    "activeTimeMinutes": 20,
+    "totalTimeMinutes": 30,
+    "servings": 4,
+    "nutrition": {
+      "calories": 460,
+      "protein": 34,
+      "carbs": 38,
+      "fats": 18
+    },
+    "ingredients": [
+      {
+        "name": "ground turkey",
+        "quantity": 1,
+        "unit": "lb",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "cannellini beans",
+        "quantity": 2,
+        "unit": "can",
+        "prep": "rinsed and drained",
+        "category": "pantry"
+      },
+      {
+        "name": "crushed tomatoes",
+        "quantity": 1,
+        "unit": "can",
+        "category": "pantry"
+      },
+      {
+        "name": "baby spinach",
+        "quantity": 4,
+        "unit": "cup",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "clove",
+        "prep": "minced",
+        "category": "produce"
+      },
+      {
+        "name": "parmesan",
+        "quantity": 0.25,
+        "unit": "cup",
+        "prep": "grated",
+        "category": "dairy",
+        "optional": true
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Brown turkey in a large skillet with olive oil, garlic, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Stir in beans and crushed tomatoes; simmer until slightly thickened, about 10 minutes.",
+        "timerMinutes": 10
+      },
+      {
+        "order": 3,
+        "text": "Fold in spinach until wilted and finish with parmesan if using."
+      }
+    ],
+    "storageNotes": "Keeps up to 4 days and freezes well in single portions.",
+    "reheatNotes": "Reheat on the stove or microwave with a splash of water.",
+    "prepAheadNotes": "Rinse beans and mince garlic ahead for a 20-minute cook.",
+    "toddlerTip": "Mash beans slightly and serve with toast strips.",
+    "glucoseTip": "Serve over sautéed greens or cauliflower rice instead of bread.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "url": null,
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Cucumber Feta Snack Plates",
+    "cuisine": "Mediterranean",
+    "region": "Greek-inspired",
+    "mealTypes": [
+      "snack",
+      "lunch"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "no-cook"
+    ],
+    "flavorTags": [
+      "crunchy",
+      "briny",
+      "fresh"
+    ],
+    "equipment": [
+      "cutting board"
+    ],
+    "activeTimeMinutes": 10,
+    "totalTimeMinutes": 10,
+    "servings": 4,
+    "nutrition": {
+      "calories": 260,
+      "protein": 12,
+      "carbs": 22,
+      "fats": 15
+    },
+    "ingredients": [
+      {
+        "name": "cucumber",
+        "quantity": 2,
+        "unit": "",
+        "prep": "sliced",
+        "category": "produce"
+      },
+      {
+        "name": "feta",
+        "quantity": 6,
+        "unit": "oz",
+        "prep": "cubed",
+        "category": "dairy"
+      },
+      {
+        "name": "whole wheat pita",
+        "quantity": 2,
+        "unit": "",
+        "prep": "cut into wedges",
+        "category": "bakery"
+      },
+      {
+        "name": "hummus",
+        "quantity": 0.75,
+        "unit": "cup",
+        "category": "deli"
+      },
+      {
+        "name": "grapes",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "produce",
+        "optional": true
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Arrange cucumber, feta, pita wedges, hummus, and grapes on plates or lunch containers."
+      },
+      {
+        "order": 2,
+        "text": "Keep hummus covered until ready to serve."
+      }
+    ],
+    "storageNotes": "Pack components separately up to 2 days so pita stays dry.",
+    "reheatNotes": "No reheating needed.",
+    "prepAheadNotes": "Slice cucumbers and cube feta the night before.",
+    "toddlerTip": "Cut grapes lengthwise and crumble feta for easier bites.",
+    "glucoseTip": "Use more cucumber and feta with fewer pita wedges.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "url": null,
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Herby Lentil Stuffed Peppers",
+    "cuisine": "Mediterranean",
+    "region": "Eastern Mediterranean-inspired",
+    "mealTypes": [
+      "dinner",
+      "lunch"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-fiber"
+    ],
+    "flavorTags": [
+      "herby",
+      "tomatoey",
+      "savory"
+    ],
+    "equipment": [
+      "baking dish",
+      "skillet"
+    ],
+    "activeTimeMinutes": 25,
+    "totalTimeMinutes": 50,
+    "servings": 4,
+    "nutrition": {
+      "calories": 390,
+      "protein": 18,
+      "carbs": 55,
+      "fats": 12
+    },
+    "ingredients": [
+      {
+        "name": "bell peppers",
+        "quantity": 4,
+        "unit": "",
+        "prep": "halved and seeded",
+        "category": "produce"
+      },
+      {
+        "name": "cooked lentils",
+        "quantity": 2,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "brown rice",
+        "quantity": 1,
+        "unit": "cup",
+        "prep": "cooked",
+        "category": "grains"
+      },
+      {
+        "name": "tomato sauce",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "pantry"
+      },
+      {
+        "name": "parsley",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "produce"
+      },
+      {
+        "name": "mozzarella",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "shredded",
+        "category": "dairy",
+        "optional": true
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Place pepper halves in a baking dish and season lightly with salt."
+      },
+      {
+        "order": 2,
+        "text": "Mix lentils, rice, tomato sauce, parsley, olive oil, and pepper in a skillet until warm."
+      },
+      {
+        "order": 3,
+        "text": "Fill peppers with the lentil mixture, top with mozzarella if using, and bake at 400°F until peppers are tender, about 25 minutes.",
+        "timerMinutes": 25
+      }
+    ],
+    "storageNotes": "Refrigerate stuffed peppers up to 4 days.",
+    "reheatNotes": "Reheat covered at 350°F or microwave until hot.",
+    "prepAheadNotes": "Cook lentils and rice ahead; assemble peppers the morning of baking.",
+    "toddlerTip": "Chop the baked pepper and filling into small pieces.",
+    "glucoseTip": "Use extra lentils and halve the rice if desired.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "url": null,
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Za'atar Egg Breakfast Pitas",
+    "cuisine": "Mediterranean",
+    "region": "Levant-inspired",
+    "mealTypes": [
+      "breakfast"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "quick"
+    ],
+    "flavorTags": [
+      "herby",
+      "tangy",
+      "savory"
+    ],
+    "equipment": [
+      "skillet"
+    ],
+    "activeTimeMinutes": 12,
+    "totalTimeMinutes": 15,
+    "servings": 4,
+    "nutrition": {
+      "calories": 360,
+      "protein": 19,
+      "carbs": 32,
+      "fats": 18
+    },
+    "ingredients": [
+      {
+        "name": "eggs",
+        "quantity": 8,
+        "unit": "",
+        "category": "dairy"
+      },
+      {
+        "name": "whole wheat pita",
+        "quantity": 4,
+        "unit": "",
+        "prep": "warmed",
+        "category": "bakery"
+      },
+      {
+        "name": "za'atar",
+        "quantity": 2,
+        "unit": "tsp",
+        "category": "pantry"
+      },
+      {
+        "name": "Greek yogurt",
+        "quantity": 0.5,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "cucumber",
+        "quantity": 1,
+        "unit": "",
+        "prep": "thinly sliced",
+        "category": "produce"
+      },
+      {
+        "name": "cherry tomatoes",
+        "quantity": 1,
+        "unit": "cup",
+        "prep": "halved",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Whisk eggs with za'atar, salt, and pepper."
+      },
+      {
+        "order": 2,
+        "text": "Scramble eggs in a lightly oiled skillet until just set, about 4 minutes.",
+        "timerMinutes": 4
+      },
+      {
+        "order": 3,
+        "text": "Spread yogurt inside warm pitas and fill with eggs, cucumber, and tomatoes."
+      }
+    ],
+    "storageNotes": "Best fresh; refrigerate leftover eggs up to 3 days.",
+    "reheatNotes": "Reheat eggs gently and assemble pitas after warming.",
+    "prepAheadNotes": "Slice vegetables and portion yogurt the night before.",
+    "toddlerTip": "Serve pita, eggs, and vegetables separately with a small yogurt dip.",
+    "glucoseTip": "Use half a pita and add extra cucumber and tomato.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "url": null,
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "White Bean Tuna Cucumber Boats",
+    "cuisine": "Mediterranean",
+    "region": "Italian-inspired",
+    "mealTypes": [
+      "lunch",
+      "snack"
+    ],
+    "dietTags": [
+      "high-protein",
+      "no-cook"
+    ],
+    "flavorTags": [
+      "lemony",
+      "briny",
+      "fresh"
+    ],
+    "equipment": [
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 15,
+    "totalTimeMinutes": 15,
+    "servings": 4,
+    "nutrition": {
+      "calories": 310,
+      "protein": 27,
+      "carbs": 24,
+      "fats": 12
+    },
+    "ingredients": [
+      {
+        "name": "English cucumbers",
+        "quantity": 2,
+        "unit": "",
+        "prep": "halved lengthwise",
+        "category": "produce"
+      },
+      {
+        "name": "canned tuna",
+        "quantity": 10,
+        "unit": "oz",
+        "prep": "drained",
+        "category": "pantry"
+      },
+      {
+        "name": "white beans",
+        "quantity": 1.5,
+        "unit": "cup",
+        "prep": "rinsed and drained",
+        "category": "pantry"
+      },
+      {
+        "name": "celery",
+        "quantity": 2,
+        "unit": "stalk",
+        "prep": "finely diced",
+        "category": "produce"
+      },
+      {
+        "name": "lemon juice",
+        "quantity": 2,
+        "unit": "tbsp",
+        "category": "produce"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry"
+      },
+      {
+        "name": "capers",
+        "quantity": 1,
+        "unit": "tbsp",
+        "category": "pantry",
+        "optional": true
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Scoop a shallow channel from each cucumber half to make boats."
+      },
+      {
+        "order": 2,
+        "text": "Mix tuna, white beans, celery, lemon juice, olive oil, capers, salt, and pepper."
+      },
+      {
+        "order": 3,
+        "text": "Spoon the tuna-bean mixture into cucumber boats and serve chilled."
+      }
+    ],
+    "storageNotes": "Store filling and cucumber separately up to 2 days.",
+    "reheatNotes": "No reheating needed.",
+    "prepAheadNotes": "Make the filling ahead; fill cucumber boats right before eating.",
+    "toddlerTip": "Serve as small cucumber rounds with tuna-bean salad on the side.",
+    "glucoseTip": "This is naturally lower carb; add extra cucumber or greens if still hungry.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "url": null,
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Moroccan Chickpea Couscous Skillet",
+    "cuisine": "Mediterranean",
+    "region": "Moroccan-inspired",
+    "mealTypes": [
+      "dinner",
+      "lunch"
+    ],
+    "dietTags": [
+      "vegetarian",
+      "high-fiber"
+    ],
+    "flavorTags": [
+      "warm-spiced",
+      "tomatoey",
+      "cozy"
+    ],
+    "equipment": [
+      "skillet"
+    ],
+    "activeTimeMinutes": 15,
+    "totalTimeMinutes": 25,
+    "servings": 4,
+    "nutrition": {
+      "calories": 430,
+      "protein": 17,
+      "carbs": 68,
+      "fats": 11
+    },
+    "ingredients": [
+      {
+        "name": "canned chickpeas",
+        "quantity": 2,
+        "unit": "can",
+        "prep": "rinsed and drained",
+        "category": "pantry"
+      },
+      {
+        "name": "whole wheat couscous",
+        "quantity": 1,
+        "unit": "cup",
+        "category": "grains"
+      },
+      {
+        "name": "diced tomatoes",
+        "quantity": 1,
+        "unit": "can",
+        "category": "pantry"
+      },
+      {
+        "name": "zucchini",
+        "quantity": 1,
+        "unit": "",
+        "prep": "diced",
+        "category": "produce"
+      },
+      {
+        "name": "carrot",
+        "quantity": 1,
+        "unit": "",
+        "prep": "shredded",
+        "category": "produce"
+      },
+      {
+        "name": "ras el hanout",
+        "quantity": 2,
+        "unit": "tsp",
+        "category": "pantry"
+      },
+      {
+        "name": "parsley",
+        "quantity": 0.25,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "produce"
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Sauté zucchini and carrot with olive oil, ras el hanout, salt, and pepper until softened."
+      },
+      {
+        "order": 2,
+        "text": "Add chickpeas, diced tomatoes, and 1 cup water; simmer for 8 minutes.",
+        "timerMinutes": 8
+      },
+      {
+        "order": 3,
+        "text": "Stir in couscous, cover, remove from heat, and let stand until fluffy, about 5 minutes.",
+        "timerMinutes": 5
+      },
+      {
+        "order": 4,
+        "text": "Fluff with a fork and finish with parsley."
+      }
+    ],
+    "storageNotes": "Refrigerate up to 4 days.",
+    "reheatNotes": "Reheat with a splash of water to loosen the couscous.",
+    "prepAheadNotes": "Dice zucchini and shred carrot ahead for a fast weeknight skillet.",
+    "toddlerTip": "Mash some chickpeas and serve with plain yogurt if spices are strong.",
+    "glucoseTip": "Use extra zucchini and chickpeas with a smaller couscous portion.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "url": null,
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  },
+  {
+    "title": "Herbed Turkey Kofta Lettuce Plates",
+    "cuisine": "Mediterranean",
+    "region": "Eastern Mediterranean-inspired",
+    "mealTypes": [
+      "dinner",
+      "lunch"
+    ],
+    "dietTags": [
+      "high-protein",
+      "lower-carb"
+    ],
+    "flavorTags": [
+      "herby",
+      "garlicky",
+      "fresh"
+    ],
+    "equipment": [
+      "sheet pan",
+      "mixing bowl"
+    ],
+    "activeTimeMinutes": 20,
+    "totalTimeMinutes": 35,
+    "servings": 4,
+    "nutrition": {
+      "calories": 410,
+      "protein": 34,
+      "carbs": 24,
+      "fats": 22
+    },
+    "ingredients": [
+      {
+        "name": "ground turkey",
+        "quantity": 1.25,
+        "unit": "lb",
+        "category": "meat/seafood"
+      },
+      {
+        "name": "parsley",
+        "quantity": 0.5,
+        "unit": "cup",
+        "prep": "chopped",
+        "category": "produce"
+      },
+      {
+        "name": "garlic",
+        "quantity": 2,
+        "unit": "clove",
+        "prep": "minced",
+        "category": "produce"
+      },
+      {
+        "name": "cumin",
+        "quantity": 1,
+        "unit": "tsp",
+        "category": "pantry"
+      },
+      {
+        "name": "romaine lettuce",
+        "quantity": 1,
+        "unit": "head",
+        "prep": "leaves separated",
+        "category": "produce"
+      },
+      {
+        "name": "tzatziki",
+        "quantity": 0.75,
+        "unit": "cup",
+        "category": "dairy"
+      },
+      {
+        "name": "whole wheat pita",
+        "quantity": 2,
+        "unit": "",
+        "prep": "warmed",
+        "category": "bakery",
+        "optional": true
+      }
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "text": "Mix turkey, parsley, garlic, cumin, salt, and pepper; shape into small oval kofta."
+      },
+      {
+        "order": 2,
+        "text": "Bake on a sheet pan at 425°F until cooked through, about 16 minutes.",
+        "timerMinutes": 16
+      },
+      {
+        "order": 3,
+        "text": "Serve kofta with lettuce leaves, tzatziki, and pita if using."
+      }
+    ],
+    "storageNotes": "Refrigerate cooked kofta up to 4 days.",
+    "reheatNotes": "Reheat kofta in a skillet or microwave; keep lettuce cold.",
+    "prepAheadNotes": "Shape kofta up to 24 hours ahead and refrigerate covered.",
+    "toddlerTip": "Cut kofta into small strips and offer tzatziki as a dip.",
+    "glucoseTip": "Build lettuce plates first and use pita as an optional side.",
+    "status": "reviewed",
+    "source": {
+      "name": "Mammas Chef Original",
+      "url": null,
+      "author": "Mammas Chef",
+      "license": "original"
+    }
+  }
+]

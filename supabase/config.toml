@@ -1,0 +1,30 @@
+project_id = "mammas-chef"
+
+[auth]
+site_url = "http://localhost:8080"
+additional_redirect_urls = ["http://localhost:8080/reset-password"]
+
+[auth.email]
+enable_confirmations = false
+
+[analytics]
+enabled = false
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed/recipe-library.sql"]
+
+[functions.generate-meal-plan]
+verify_jwt = false
+
+[functions.swap-meal]
+verify_jwt = false
+
+[functions.regenerate-day]
+verify_jwt = false
+
+[functions.generate-shopping-list]
+verify_jwt = false
+
+[functions.estimate-custom-recipe-nutrition]
+verify_jwt = false

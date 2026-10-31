@@ -1,0 +1,2 @@
+ALTER TABLE public.meal_plans
+ADD COLUMN IF NOT EXISTS notes text NOT NULL DEFAULT '';
