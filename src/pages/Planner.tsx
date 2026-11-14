@@ -19,18 +19,14 @@ import DayRegenerationDrawer from "@/components/DayRegenerationDrawer";
 import * as Sentry from "@sentry/react";
 import { captureUnlessRateLimit } from "@/lib/sentryExpected";
 import { generateAndValidateMealPlan } from "@/services/mealPlanService";
-import { hydrateLibraryRecipeReferences } from "@/services/recipeLibraryService";
 import { streamMealSwap } from "@/services/mealSwapService";
 import { streamDayRegeneration } from "@/services/dayRegenerationService";
 import { saveMealPlan, loadMealPlan, deleteMealPlan, updateMealPlanStartDate, updateMealPlanNotes, renameMealPlan } from "@/services/mealPlanDbService";
 import { listSavedPlans, type SavedPlanSummary } from "@/services/savedPlansService";
 import { generateShoppingList } from "@/services/shoppingListService";
 import { supabase } from "@/integrations/supabase/client";
-import { extractPantryItemsFromPrompt, applyPantryStatus } from "@/lib/groceryUtils";
-import { buildShoppingListFromRecipes } from "@/lib/shoppingListBuilder";
-import { parseSwapResponse, parseDayRegenerationResponse, normalizeMealPlan, stripSkippedDayTips, SYNTHESIZED_ID_PREFIX } from "@/lib/mealPlanParser";
-import { applyLeftoverCascade } from "@/lib/leftoverCascade";
-import { remapTipRefs, scaleRecipeServings, skipMealInPlan } from "@/lib/planEdits";
+import { parseSwapResponse, parseDayRegenerationResponse, normalizeMealPlan } from "@/lib/mealPlanParser";
+import { scaleRecipeServings, skipMealInPlan } from "@/lib/planEdits";
 import { format, parseISO } from "date-fns";
 import { getNextStartDate, getOrderedDays } from "@/constants/preferences";
 import { parse as parsePartialJson, Allow } from "partial-json";
@@ -47,14 +43,18 @@ import {
 } from "@/lib/plannerV2Slots";
 import { isSlotSkipped } from "@/types/mealPlan";
 import type { MealPlanResponse, MealRecipe, DayPlan } from "@/types/mealPlan";
-
-/** Sort a days array to match the user's week-start-day preference. */
-function sortDays(days: DayPlan[], weekStart: string): DayPlan[] {
-  const order = getOrderedDays(weekStart);
-  return [...days].sort(
-    (a, b) => order.indexOf(a.day) - order.indexOf(b.day)
-  );
-}
+import {
+  sortDays,
+  mergePinnedStubs,
+  finalizeGeneratedPlan,
+  allergenFlaggedMeals,
+  countMissingMeals,
+  applyPlanEdit,
+  buildSwapRequest,
+  computeSwapEdit,
+  buildDayRegenRequest,
+  computeDayRegenEdit,
+} from "@/services/planWorkflow";
 
 function blurActiveElement() {
   if (typeof document === "undefined") return;
@@ -356,23 +356,9 @@ const Planner = () => {
     }
     const { dayIndex, mealType } = swapTarget;
 
-    const day = mealPlan.weekPlan.days[dayIndex];
-    const oldMeal = day?.meals.find((m) => m.mealType === mealType);
-    if (!oldMeal) return;
-
-    // All meals except the one being swapped — passed to AI for variety avoidance
-    const remainingMeals = mealPlan.weekPlan.days
-      .flatMap((d) => d.meals)
-      .filter((m) => m.id !== oldMeal.id);
-
-    // D-11: dependent-sizing context — dependents of the outgoing meal need the
-    // replacement sized to cover their portions too. Edge reads this optionally.
-    const dependents = mealPlan.weekPlan.days
-      .flatMap((d) => d.meals)
-      .filter((m) => m.status === "leftover" && m.source_meal_id === oldMeal.id);
-    const dependentSource = dependents.length > 0
-      ? { count: dependents.length, servingsSum: dependents.reduce((sum, m) => sum + (m.servings ?? 0), 0) }
-      : undefined;
+    const swapRequest = buildSwapRequest(mealPlan, dayIndex, mealType);
+    if (!swapRequest) return;
+    const { day, oldMeal, remainingMeals, dependentSource } = swapRequest;
 
     setIsSwapping(true);
     let fullText = "";
@@ -392,57 +378,26 @@ const Planner = () => {
         setIsSwapping(false);
         setSwapTarget(null);
         try {
-          const swapResult = parseSwapResponse(fullText);
-
-          // Preserve the old meal's slot id so favorites/references stay intact.
-          // Also carry forward `creates`: swap-meal's strict schema never emits it
-          // (Phase 15 Pitfall 3), so without this a batch-source meal loses its own
-          // "creates" tag on its own replacement — the NEXT swap of this same slot
-          // would then find no dependents (root-cause chain link 4).
-          const newMeal = { ...swapResult.newMeal, id: oldMeal.id, creates: oldMeal.creates };
-
-          // Place newMeal into the day BEFORE running the cascade — dependents
-          // must see the already-placed replacement (D-10). Computed from the
-          // closure's current mealPlan (same snapshot oldMeal/dayIndex/mealType
-          // were already derived from above) rather than inside the setMealPlan
-          // updater, so the cascade's toastDescriptionSuffix is available
-          // synchronously for the toast call below without depending on React's
-          // updater-invocation timing.
-          const updatedDays = mealPlan.weekPlan.days.map((d, dIdx) => {
-            if (dIdx !== dayIndex) return d;
-            return {
-              ...d,
-              meals: d.meals.map((m) => m.mealType === mealType ? newMeal : m),
-            };
-          });
-          const cascadeResult = applyLeftoverCascade({ ...mealPlan.weekPlan, days: updatedDays }, oldMeal, newMeal);
-          if (cascadeResult.toastDescriptionSuffix) {
+          // Computed from the closure's snapshot (the one oldMeal came from) so the
+          // cascade suffix is available synchronously for the toast below.
+          const edit = computeSwapEdit(mealPlan, dayIndex, oldMeal, parseSwapResponse(fullText));
+          const cascadeSuffix = edit.cascadeSuffixes[0];
+          if (cascadeSuffix) {
             Sentry.addBreadcrumb({
               category: "leftover_cascade",
               message: "Swap re-pointed dependent leftover(s) to the new source",
               level: "info",
-              data: { oldMealId: oldMeal.id, newMealTitle: newMeal.title, suffix: cascadeResult.toastDescriptionSuffix },
+              data: { oldMealId: oldMeal.id, newMealTitle: edit.newMeal.title, suffix: cascadeSuffix },
             });
           }
 
-          // The edge already merged the week's tips (kept + a tagged delta for the new
-          // meal); a missing list keeps the current tips. The strip keeps parity with
-          // the generation and skip paths.
-          setMealPlan(prev => {
-            if (prev === null) return prev;
-            return stripSkippedDayTips({
-              ...prev,
-              weekPlan: cascadeResult.weekPlan,
-              shoppingList: [],
-              prepTips: swapResult.updatedPrepTips ?? prev.prepTips,
-            });
-          });
+          setMealPlan((prev) => (prev === null ? prev : applyPlanEdit(prev, edit)));
           setIsSaved(false);
           // TOAST_LIMIT=1 (use-toast.ts) — extend THIS description with the
           // cascade's re-point confirmation; never fire a second toast() call.
           toast({
             title: "Meal swapped!",
-            description: `Prep tips updated.${cascadeResult.toastDescriptionSuffix ? ` ${cascadeResult.toastDescriptionSuffix}` : ""} Shopping list updated — tap Save Plan to keep this change.`,
+            description: `Prep tips updated.${cascadeSuffix ? ` ${cascadeSuffix}` : ""} Shopping list updated — tap Save Plan to keep this change.`,
           });
         } catch (e) {
           Sentry.captureException(e, { tags: { feature: "planner", action: "swap_parse" } });
@@ -472,20 +427,9 @@ const Planner = () => {
       return;
     }
     const { dayIndex, dayLabel } = dayRegenTarget;
-    const day = mealPlan.weekPlan.days[dayIndex];
-    const targetDayLabel = day?.day ?? dayLabel;
-    if (!targetDayLabel) return;
-
-    // Determine which meal types need regeneration (non-skipped)
-    const allMealTypes = ["breakfast", "lunch", "dinner", "snack"];
-    const activeMealTypes = allMealTypes.filter(
-      (t) => !isSlotSkipped(mealPlan.skipSlots, targetDayLabel, t),
-    );
-
-    // All meals from other days — for variety avoidance
-    const remainingMeals = mealPlan.weekPlan.days
-      .filter((_, i) => i !== dayIndex)
-      .flatMap((d) => d.meals);
+    const regenRequest = buildDayRegenRequest(mealPlan, dayIndex, dayLabel);
+    if (!regenRequest) return;
+    const { targetDayLabel, activeMealTypes, remainingMeals, replacedMealIds } = regenRequest;
 
     setIsRegeneratingDay(true);
     let fullText = "";
@@ -498,66 +442,17 @@ const Planner = () => {
       hint,
       batches: mealPlan.weekPlan.batches?.length ? mealPlan.weekPlan.batches : undefined,
       skipSlots: mealPlan.skipSlots,
-      // The day's current meal ids (empty for a missing day): sending the array opts
-      // the edge into prep-tip merging, and the ids are the slots whose tips it drops.
-      replacedMealIds: day?.meals.map((m) => m.id) ?? [],
+      replacedMealIds,
       accessToken: session.access_token,
       onDelta: (chunk) => { streamActivity.ping(); fullText += chunk; },
       onDone: () => {
         setIsRegeneratingDay(false);
         setDayRegenTarget(null);
         try {
-          const regenResult = parseDayRegenerationResponse(fullText);
-          const existingDay = mealPlan.weekPlan.days[dayIndex];
-          // Keep each replaced slot's id (mirrors swap's oldMeal.id carry-over) so
-          // ids stay unique across the plan — duplicate ids collide on save.
-          // A same-day leftover pair inside the regenerated day links via
-          // source_meal_id to an AI-era id, so remap those through the same map.
-          // A slot with no prior meal (missing-day placeholder, or a gap in the
-          // day) gets a fresh id instead of the AI's — "regen-unique-id-1"-style
-          // ids repeat across regen calls and would collide on save.
-          const regenIdMap = new Map(
-            regenResult.newMeals.map((nm) => [
-              nm.id,
-              existingDay?.meals.find((m) => m.mealType === nm.mealType)?.id
-                ?? `${SYNTHESIZED_ID_PREFIX}${globalThis.crypto?.randomUUID?.() ?? `${targetDayLabel}-${nm.mealType}-${Date.now()}`}`,
-            ]),
+          const edit = computeDayRegenEdit(
+            mealPlan, dayIndex, targetDayLabel, parseDayRegenerationResponse(fullText), weekStartDay ?? "Sunday",
           );
-          const newMeals = regenResult.newMeals.map((nm) => ({
-            ...nm,
-            id: regenIdMap.get(nm.id) ?? nm.id,
-            source_meal_id: nm.source_meal_id && regenIdMap.has(nm.source_meal_id)
-              ? regenIdMap.get(nm.source_meal_id)
-              : nm.source_meal_id,
-          }));
-          // The edge tags this day's delta tips with the model's newMeals ids; map them
-          // to the ids the plan now holds (preserved slot id, or a fresh gen- id for an
-          // empty slot / missing day) so the strip below resolves them and save remaps them.
-          const regenTips = regenResult.updatedPrepTips && remapTipRefs(regenResult.updatedPrepTips, regenIdMap);
-
-          const updatedDays = mealPlan.weekPlan.days.map((d, dIdx) => {
-            if (dIdx !== dayIndex) return d;
-            return { ...d, meals: newMeals };
-          });
-          const nextDays = existingDay
-            ? updatedDays
-            : sortDays([...updatedDays, { day: targetDayLabel, meals: newMeals }], weekStartDay ?? "Sunday");
-
-          // Run the cascade once per regenerated meal that was a leftover
-          // source in the OLD day (D-13) — fold every dependent-repoint
-          // suffix into one summarizing toast clause. A day with no prior
-          // meals (brand-new day) has nothing to cascade from.
-          let cascadedWeekPlan = { ...mealPlan.weekPlan, days: nextDays };
-          const cascadeSuffixes: string[] = [];
-          if (existingDay) {
-            for (const newMealForType of newMeals) {
-              const oldMealForType = existingDay.meals.find((m) => m.mealType === newMealForType.mealType);
-              if (!oldMealForType) continue;
-              const cascadeResult = applyLeftoverCascade(cascadedWeekPlan, oldMealForType, newMealForType);
-              cascadedWeekPlan = cascadeResult.weekPlan;
-              if (cascadeResult.toastDescriptionSuffix) cascadeSuffixes.push(cascadeResult.toastDescriptionSuffix);
-            }
-          }
+          const { cascadeSuffixes } = edit;
           if (cascadeSuffixes.length > 0) {
             Sentry.addBreadcrumb({
               category: "leftover_cascade",
@@ -568,15 +463,7 @@ const Planner = () => {
           }
           const toastDescriptionSuffix = cascadeSuffixes.length > 0 ? cascadeSuffixes.join(" ") : null;
 
-          setMealPlan((prev) => {
-            if (prev === null) return prev;
-            return stripSkippedDayTips({
-              ...prev,
-              weekPlan: cascadedWeekPlan,
-              shoppingList: [],
-              prepTips: regenTips ?? prev.prepTips,
-            });
-          });
+          setMealPlan((prev) => (prev === null ? prev : applyPlanEdit(prev, edit)));
           setIsSaved(false);
           // TOAST_LIMIT=1 (use-toast.ts) — extend THIS description with the
           // cascade's re-point confirmation; never fire a second toast() call.
@@ -612,7 +499,7 @@ const Planner = () => {
 
     const planWithNotes = { ...planToSave, notes: notesToSave };
     // F0: be honest when the generated plan came back with gaps.
-    const missing = checkPlanCompleteness(planToSave.weekPlan.days, orderedDays, planToSave.skipSlots).totalMissing;
+    const missing = countMissingMeals(planToSave, weekStartDay ?? "Sunday");
     const savedTitle = missing > 0 ? `Plan saved — ${missing} meal${missing === 1 ? "" : "s"} missing` : null;
     const missingPrefix = missing > 0 ? "Regenerate the missing days from the calendar. " : "";
 
@@ -778,25 +665,6 @@ const Planner = () => {
 
     // Pins from Recipes apply to week plans only; a one-meal idea ignores them.
     const usePins = job === "week" && pinnedRecipes.length > 0;
-    // Build pinned recipe lookup maps once for reuse in both streaming and final parse
-    const pinnedById = usePins
-      ? new Map(pinnedRecipes.map(r => [r.id, r])) : null;
-    const pinnedByTitle = usePins
-      ? new Map(pinnedRecipes.map(r => [r.title.toLowerCase().trim(), r])) : null;
-
-    const mergePinnedStubs = (days: MealPlanResponse["weekPlan"]["days"]) => {
-      if (!pinnedByTitle) return days;
-      return days.map(day => ({
-        ...day,
-        meals: day.meals.map(meal => {
-          if (!meal.title) return meal;
-          const full = pinnedById?.get(meal.id)
-            || pinnedByTitle.get(meal.title.toLowerCase().trim());
-          if (full) return { ...full };
-          return meal;
-        }),
-      }));
-    };
 
     let fullText = "";
 
@@ -841,7 +709,7 @@ const Planner = () => {
               const plan = normalizeMealPlan({
                 weekPlan: {
                   title: partial.weekPlan.title || "Generating your plan...",
-                  days: sortDays(mergePinnedStubs(partial.weekPlan.days), weekStartDay ?? "Sunday"),
+                  days: sortDays(mergePinnedStubs(partial.weekPlan.days, usePins ? pinnedRecipes : undefined), weekStartDay ?? "Sunday"),
                 },
                 shoppingList: [],
                 prepTips: partial.prepTips || [],
@@ -893,40 +761,17 @@ const Planner = () => {
       onSuccess: async (parsed) => {
         tearDownOverlay();
         try {
-          parsed.weekPlan.days = sortDays(mergePinnedStubs(parsed.weekPlan.days), weekStartDay ?? "Sunday");
-
-          const pantryItems = extractPantryItemsFromPrompt(prompt);
-          const currentSkipSlots = Object.keys(skipSlots).length > 0 ? skipSlots : undefined;
-          const enrichedPlan = await hydrateLibraryRecipeReferences({
-            ...parsed,
-            shoppingList: [],
-            pantryItems,
-            skipSlots: currentSkipSlots,
+          // The locally seeded shopping list shows in the same paint as the calendar;
+          // the auto-save below replaces it with the AI-humanized list.
+          const cleanedPlan = await finalizeGeneratedPlan(parsed, {
+            prompt,
+            weekStart: weekStartDay ?? "Sunday",
+            skipSlots: Object.keys(skipSlots).length > 0 ? skipSlots : undefined,
+            pinnedRecipes: usePins ? pinnedRecipes : undefined,
           });
 
-          // Strip skip-violating prep tips before save (D-05): runs after skipSlots
-          // is attached, mirroring the load-path strip. Defense-in-depth on the
-          // generation path so newly saved plans stay clean even if the edge regresses.
-          const cleanedPlan = stripSkippedDayTips(enrichedPlan, currentSkipSlots);
-
-          // Seed a locally-aggregated shopping list synchronously so the user sees
-          // a usable list in the same paint as the calendar — before the AI
-          // humanization round-trip in savePlanWithShoppingListReview completes.
-          // The auto-save below will overwrite this with the AI-humanized list
-          // once generateShoppingList resolves.
-          // D-18: pass each recipe's day alongside its existing id/title/mealType
-          // identity so seeded shopping items carry `sources` (SHOP-04) — the
-          // widened builder input from 17-03.
-          const seedRecipes = cleanedPlan.weekPlan.days.flatMap((d) => d.meals.map((m) => ({ ...m, day: d.day })));
-          const seedAggregated = buildShoppingListFromRecipes(seedRecipes);
-          if (seedAggregated.length > 0) {
-            cleanedPlan.shoppingList = applyPantryStatus(seedAggregated, pantryItems);
-          }
-
           setMealPlan(cleanedPlan);
-          const allergyFlagged = cleanedPlan.weekPlan.days
-            .flatMap((d) => d.meals)
-            .filter((m) => m.cautionNote?.startsWith("Allergy warning"));
+          const allergyFlagged = allergenFlaggedMeals(cleanedPlan).map((f) => f.meal);
           if (allergyFlagged.length > 0) {
             toast({
               title: "Check this plan for allergens",
