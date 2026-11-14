@@ -12,3 +12,12 @@ Deno.test("markAllergenCautions warns on the flagged meal only and keeps its exi
   assertEquals(meals[1].cautionNote, "Allergy warning: may contain Sesame. Check every ingredient before cooking.");
   assertEquals(meals[2].cautionNote, null);
 });
+
+Deno.test("checkAllergens matches allergy names case-insensitively and reports the canonical name", () => {
+  const recipes = [{ title: "Hummus Wrap", ingredients: [{ name: "hummus" }] }];
+  for (const name of ["sesame", "SESAME", " Sesame "]) {
+    const violations = checkAllergens(recipes, [name]);
+    assertEquals(violations.length, 1, name);
+    assertEquals(violations[0].allergen, "Sesame");
+  }
+});

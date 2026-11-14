@@ -82,5 +82,8 @@
     "vite-node": "^3.2.4",
     "vitest": "^3.2.4"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "bin": {
+    "mammaschef": "bin/mammaschef"
+  }
 }

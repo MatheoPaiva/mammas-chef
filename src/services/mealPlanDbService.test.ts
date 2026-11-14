@@ -171,6 +171,17 @@ describe("buildRecipeInsertPayload", () => {
 });
 
 describe("insertRecipeIntoPlan", () => {
+  // Plan owner + profile lookups used by the manual-add allergen scan.
+  let allergies: string[] = [];
+  const selectSingle = (data: unknown) => ({
+    select: vi.fn(() => ({ eq: vi.fn(() => ({ single: vi.fn().mockResolvedValue({ data, error: null }) })) })),
+  });
+  const ownerTables = {
+    get meal_plans() { return selectSingle({ user_id: "user-1" }); },
+    get profiles() { return selectSingle({ allergies }); },
+  };
+  beforeEach(() => { allergies = []; });
+
   function mockSuccessfulRecipeInsert() {
     const recipeSingle = vi.fn().mockResolvedValue({ data: { id: "new-recipe-row" }, error: null });
     const recipeSelect = vi.fn(() => ({ single: recipeSingle }));
@@ -187,6 +198,7 @@ describe("insertRecipeIntoPlan", () => {
     mockFrom.mockImplementation((table: string) => {
       if (table === "recipes") return { insert: recipeInsert, delete: recipeDelete };
       if (table === "meal_plan_days") return { select: daySelect };
+      if (table in ownerTables) return ownerTables[table as keyof typeof ownerTables];
       throw new Error(`Unexpected table ${table}`);
     });
 
@@ -206,6 +218,18 @@ describe("insertRecipeIntoPlan", () => {
     expect(mocks.dayEq).toHaveBeenCalledWith("id", "day-1");
     expect(mockInvalidateShoppingList).toHaveBeenCalledWith("plan-1");
     expect(mockGenerateShoppingList).toHaveBeenCalledWith("plan-1");
+  });
+
+  it("marks an allergy warning on a manually added recipe that conflicts with the owner's profile", async () => {
+    const mocks = mockSuccessfulRecipeInsert();
+    allergies = ["sesame"];
+    const hummus = { ...recipe, ingredients: [{ name: "hummus", quantity: 1, unit: "cup" }] };
+
+    await insertRecipeIntoPlan("day-1", hummus, false);
+
+    expect(mocks.recipeInsert).toHaveBeenCalledWith(expect.objectContaining({
+      caution_note: "Allergy warning: may contain Sesame. Check every ingredient before cooking.",
+    }));
   });
 
   it("does not fail the recipe insert if post-save AI shopping-list generation fails", async () => {
@@ -243,6 +267,7 @@ describe("insertRecipeIntoPlan", () => {
     mockFrom.mockImplementation((table: string) => {
       if (table === "recipes") return { insert: recipeInsert };
       if (table === "meal_plan_days") return { select: daySelect };
+      if (table in ownerTables) return ownerTables[table as keyof typeof ownerTables];
       throw new Error(`Unexpected table ${table}`);
     });
 

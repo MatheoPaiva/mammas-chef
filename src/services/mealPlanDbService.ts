@@ -9,6 +9,8 @@ import { recipeIdentityKey } from "@/lib/recipeIdentity";
 import { normalizeUuid } from "@/lib/uuid";
 import { logAction, logError } from "@/services/activityLogger";
 import { generateShoppingList, invalidateShoppingList } from "@/services/shoppingListService";
+// Pure TS with no Deno APIs, shared with the edge functions so both scan the same way.
+import { checkAllergens, markAllergenCautions } from "../../supabase/functions/_shared/allergens";
 
 /** Safely cast a Json column to string[], returning [] if not an array of strings. */
 function asStringArray(val: unknown): string[] {
@@ -561,7 +563,28 @@ export function buildRecipeInsertPayload(dayId: string, recipe: MealRecipe, id?:
   };
 }
 
+/**
+ * Library and custom recipes skip the AI pipeline's allergen scan, so scan them here
+ * against the plan owner's profile before they are saved into a plan.
+ */
+async function withAllergenCaution(dayId: string, recipe: MealRecipe): Promise<MealRecipe> {
+  const { data: day } = await supabase.from("meal_plan_days").select("meal_plan_id").eq("id", dayId).single();
+  const { data: plan } = day
+    ? await supabase.from("meal_plans").select("user_id").eq("id", day.meal_plan_id).single()
+    : { data: null };
+  const { data: profile, error } = plan
+    ? await supabase.from("profiles").select("allergies").eq("id", plan.user_id).single()
+    : { data: null, error: null };
+  if (error) logError("manual_add_allergen_profile_failed", { error: error.message, recipe: recipe.title });
+  const allergies = profile?.allergies ?? [];
+  if (allergies.length === 0) return recipe;
+  const marked = { ...recipe };
+  markAllergenCautions([marked], checkAllergens([recipe], allergies));
+  return marked;
+}
+
 export async function insertRecipeIntoPlan(dayId: string, recipe: MealRecipe, replace: boolean): Promise<void> {
+  recipe = await withAllergenCaution(dayId, recipe);
   const payload = buildRecipeInsertPayload(dayId, recipe);
   let insertResult = await supabase.from("recipes").insert(payload).select("id").single();
 

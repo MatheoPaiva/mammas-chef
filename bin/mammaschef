@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Runs the CLI from the repo root so .env.local and the @/ import paths resolve from any folder.
+set -euo pipefail
+src="${BASH_SOURCE[0]}"
+while [ -L "$src" ]; do  # follow the npm link symlink back into the repo
+  dir="$(cd -P "$(dirname "$src")" && pwd)"; src="$(readlink "$src")"; [[ $src != /* ]] && src="$dir/$src"
+done
+cd "$(cd -P "$(dirname "$src")/.." && pwd)"
+exec node_modules/.bin/vite-node src/cli/index.ts -- "$@"
