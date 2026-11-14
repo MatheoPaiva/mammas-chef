@@ -188,7 +188,7 @@ export function toText(command: string, result: unknown): string {
   if (r.aisles) {
     const s = result as Result<typeof cmd.shopping>;
     const body = s.aisles.flatMap((a) => [`\n${a.aisle}`, ...a.items.map((i) => `  ${i.on_hand ? "(have) " : ""}${i.quantity ? `${i.quantity} ` : ""}${i.item}`)]);
-    return [`Shopping list — ${s.title}`, ...body, "", ...warningsText({ ...s, notice: cmd.NOTICE })].join("\n");
+    return [`Shopping list — ${s.title}`, ...body, "", ...warningsText(s)].join("\n");
   }
   if (r.plan_id && r.notice) return planText(result as PlanResult);
   if (r.deleted) return `Deleted plan ${r.deleted}.`;

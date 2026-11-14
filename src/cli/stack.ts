@@ -7,7 +7,8 @@ import { CliError, secondOpinionCheck } from "./commands";
 const FUNCTIONS_ENV = "supabase/functions/.env";
 const STATE_DIR = ".mammaschef"; // gitignored: PID and log of the detached functions server
 const PID_FILE = `${STATE_DIR}/functions.pid`;
-export const FUNCTIONS_LOG = `${STATE_DIR}/functions.log`;
+// Absolute, so an agent reading the message knows where it is.
+export const FUNCTIONS_LOG = `${process.cwd()}/${STATE_DIR}/functions.log`;
 const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL ?? "").trim();
 
 const hasAiKey = () => existsSync(FUNCTIONS_ENV) && /^(AI_API_KEY|CEREBRAS_API_KEY)=.+/m.test(readFileSync(FUNCTIONS_ENV, "utf8"));
@@ -83,7 +84,10 @@ export async function doctor() {
     { check: "ai_key", ok: hasAiKey(), detail: "CEREBRAS_API_KEY or AI_API_KEY", fix: `Add a key to ${FUNCTIONS_ENV}.` },
     { check: "database", ok: dbOk, detail: SUPABASE_URL || "no URL in .env.local", fix: "Run `mammaschef start`." },
     { check: "functions", ok: fnOk, detail: "AI functions", fix: `Run \`mammaschef start\`. Logs: ${FUNCTIONS_LOG}.` },
-    { check: "login", ok: loginOk, detail: email ?? "not signed in", fix: "Run `mammaschef init`." },
+    // Login can only be checked against a running database; don't send people to init for that.
+    dbOk
+      ? { check: "login", ok: loginOk, detail: email ?? "not signed in", fix: "Run `mammaschef init`." }
+      : { check: "login", ok: false, detail: "not checked: the database isn't running", fix: "Run `mammaschef start` first." },
   ];
   // Optional, so it never fails the check, but it is always reported.
   const secondOpinion = secondOpinionCheck();

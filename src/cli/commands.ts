@@ -259,6 +259,7 @@ export async function shopping(ref: string) {
     plan_id: planId,
     title: plan.weekPlan.title,
     allergen_warnings: planSummary(planId, plan, weekStart).allergen_warnings,
+    notice: NOTICE,
     aisles: [...aisles].map(([aisle, list]) => ({ aisle, items: list })),
   };
 }
