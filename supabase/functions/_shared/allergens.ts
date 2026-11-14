@@ -129,9 +129,11 @@ export function checkAllergens(
 
   const violations: AllergenViolation[] = [];
 
-  for (const allergen of userAllergens) {
+  for (const requested of userAllergens) {
+    // Case-insensitive: the website saves "Sesame", but CLI/agent callers may send "sesame".
+    const allergen = Object.keys(ALLERGEN_MAP).find((k) => k.toLowerCase() === requested.trim().toLowerCase());
+    if (!allergen) continue; // Unknown allergen — skip (prompt still blocks it)
     const def = ALLERGEN_MAP[allergen];
-    if (!def) continue; // Unknown allergen — skip (prompt still blocks it)
 
     for (const recipe of recipes) {
       for (const ingredient of recipe.ingredients) {
