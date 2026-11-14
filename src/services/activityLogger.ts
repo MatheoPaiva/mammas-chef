@@ -76,7 +76,12 @@ function isBenignFlushError(err: unknown): boolean {
 
 async function flush() {
   if (buffer.length === 0) return;
-  if (!cachedUserId) return; // Don't log for unauthenticated users
+  if (!cachedUserId) {
+    // Don't log for unauthenticated users, but cap what waits for a login so a
+    // long-running process (CLI/MCP) without one doesn't grow the buffer forever.
+    buffer = buffer.slice(-MAX_BUFFER);
+    return;
+  }
 
   const entries = [...buffer];
   buffer = [];
@@ -86,8 +91,8 @@ async function flush() {
     event_type: e.event_type,
     event_name: e.event_name,
     metadata: e.metadata || {},
-    page_url: e.page_url || window.location.pathname,
-    user_agent: navigator.userAgent,
+    page_url: e.page_url || (typeof window !== "undefined" ? window.location.pathname : ""),
+    user_agent: typeof navigator !== "undefined" ? navigator.userAgent : "",
   }));
 
   // Fire and forget — don't block the UI
