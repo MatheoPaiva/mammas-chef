@@ -27,6 +27,8 @@ Plans (<plan> is an id, the first 8+ characters of one, or "latest"):
   favorite <plan> <day> <meal>     Save a meal to favorites
   delete <plan> --yes              Delete a plan (CLI only)
 
+  mcp                              Run as a local MCP server for AI agents (stdio)
+
 Every command takes --json. Edits save immediately.`;
 
 const OPTIONS = {

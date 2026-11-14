@@ -5,6 +5,14 @@ for (const level of ["log", "info", "warn", "debug", "error"] as const) {
   console[level] = debug ? (...a: unknown[]) => process.stderr.write(`${a.map(String).join(" ")}\n`) : () => {};
 }
 
-const { run } = await import("./cli");
-// exit explicitly: the Supabase client's token-refresh timer would keep the process alive
-process.exit(await run(process.argv.slice(2)));
+const argv = process.argv.slice(2);
+if (argv[0] === "mcp") {
+  // Runs until the agent closes stdin.
+  const { serve } = await import("./mcp");
+  process.stdin.on("end", () => process.exit(0));
+  await serve();
+} else {
+  const { run } = await import("./cli");
+  // exit explicitly: the Supabase client's token-refresh timer would keep the process alive
+  process.exit(await run(argv));
+}

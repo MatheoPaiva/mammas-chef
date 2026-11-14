@@ -25,7 +25,7 @@ export class CliError extends Error {}
 
 async function requireSession() {
   const { data: { session } } = await supabase.auth.getSession();
-  if (!session) throw new CliError("Not signed in. Run `mammaschef init` first.");
+  if (!session) throw new CliError("Not signed in. The user needs to run `mammaschef init` in a terminal.");
   return session;
 }
 
@@ -90,7 +90,7 @@ export async function updateProfile(changes: ProfileChanges) {
 
 async function resolvePlanId(userId: string, ref: string) {
   const plans = await listSavedPlans(userId);
-  if (plans.length === 0) throw new CliError("No saved plans yet. Create one with `mammaschef plan \"<request>\"`.");
+  if (plans.length === 0) throw new CliError("No saved plans yet. Create one first (`mammaschef plan` or the create_plan tool).");
   if (ref === "latest") return plans[0].id;
   const matches = plans.filter((p) => p.id.startsWith(ref));
   if (matches.length === 1) return matches[0].id;
@@ -182,7 +182,7 @@ function startDateOf(plan: MealPlanResponse) {
 
 // ---------- Commands ----------
 
-export async function makePlan(opts: { request: string; startDate?: string; meals?: string[]; skipDays?: string[]; onProgress?: () => void }) {
+export async function makePlan(opts: { request: string; startDate?: string; meals?: string[]; skipDays?: string[] }) {
   const session = await requireSession();
   const profile = await getProfile();
   const weekStart = profile.week_start_day ?? "Sunday";
@@ -197,7 +197,6 @@ export async function makePlan(opts: { request: string; startDate?: string; meal
     accessToken: session.access_token,
     skipSlots: Object.keys(skipSlots).length > 0 ? skipSlots : undefined,
     startDate: format(start, "yyyy-MM-dd"),
-    onDelta: opts.onProgress,
   });
   const saved = await savePlanWithShoppingList(session.user.id, plan, { weekStart, startDate: start });
   const { summary } = await reloadSummary(saved.planId, weekStart);
