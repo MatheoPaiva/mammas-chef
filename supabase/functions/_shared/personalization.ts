@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { sanitizeInput } from "./sanitize.ts";
+import { verifyUser } from "./auth.ts";
 
 const ALL_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -48,19 +49,16 @@ export async function buildPersonalization(
   if (!authHeader?.startsWith("Bearer ")) return defaults;
 
   try {
+    // Same check the handlers ran; a second, different one could reject a token they accepted.
+    const userId = await verifyUser(req);
+    if (!userId) throw new Error("Could not verify user token for personalization");
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_ANON_KEY")!,
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    if (userError || !user) {
-      console.warn("Could not verify user token for personalization:", userError?.message);
-      return defaults;
-    }
-
-    const userId = user.id;
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("household_size, preferred_cuisines, dietary_preferences, allergies, toddler_friendly, glucose_friendly, week_start_day")
@@ -68,8 +66,7 @@ export async function buildPersonalization(
       .single();
 
     if (profileError || !profile) {
-      console.warn("No profile found for personalization:", profileError?.message);
-      return defaults;
+      throw new Error(`No profile found for personalization: ${profileError?.message}`);
     }
 
     const lines: string[] = ["\n\nUSER PREFERENCES (adapt the plan to these):"];
@@ -78,25 +75,35 @@ export async function buildPersonalization(
       lines.push(`- Household size: ${profile.household_size} (scale all servings to feed ${profile.household_size} people)`);
     }
 
-    const cuisines: string[] = (
-      Array.isArray(profile.preferred_cuisines) && profile.preferred_cuisines.length > 0
-        ? profile.preferred_cuisines
-        : []
-    ).slice(0, 7);
-    if (cuisines.length > 0) {
+    // The profile columns are free text[] the user can write to directly, so cap
+    // and sanitize them once here, for the prompt and for the returned arrays.
+    const preferredCuisines: string[] = (Array.isArray(profile.preferred_cuisines) ? profile.preferred_cuisines : [])
+      .slice(0, 7)
+      .map((c: unknown) => sanitizeInput(c, 80))
+      .filter(Boolean);
+    const dietaryPreferences: string[] = (Array.isArray(profile.dietary_preferences) ? profile.dietary_preferences : [])
+      .slice(0, 20)
+      .map((p: unknown) => sanitizeInput(p, 80))
+      .filter(Boolean);
+    // Dedupe before the cap so it never drops a real allergy (the app offers 9).
+    const allergies: string[] = [...new Set<string>(
+      (Array.isArray(profile.allergies) ? profile.allergies : [])
+        .map((a: unknown) => sanitizeInput(a, 80))
+        .filter(Boolean),
+    )].slice(0, 50);
+
+    if (preferredCuisines.length > 0) {
       lines.push(
-        `- Cuisine profile: Distribute the following cuisines proportionally across the 7-day meal plan: ${cuisines.join(", ")}. ` +
+        `- Cuisine profile: Distribute the following cuisines proportionally across the 7-day meal plan: ${preferredCuisines.join(", ")}. ` +
         `Adapt spices, proteins, and techniques authentic to each cuisine while keeping whole-food ingredients and toddler-friendly execution.`
       );
     }
 
-    if (profile.dietary_preferences?.length) {
-      const prefs = profile.dietary_preferences.map((p: unknown) => sanitizeInput(p, 80));
-      lines.push(`- Dietary preferences: ${prefs.join(", ")}`);
+    if (dietaryPreferences.length > 0) {
+      lines.push(`- Dietary preferences: ${dietaryPreferences.join(", ")}`);
     }
 
-    if (profile.allergies?.length) {
-      const allergies = profile.allergies.map((a: unknown) => sanitizeInput(a, 80));
+    if (allergies.length > 0) {
       lines.push(`- Allergies: CRITICAL — absolutely NO ${allergies.join(", NO ")}`);
     }
 
@@ -117,15 +124,6 @@ export async function buildPersonalization(
       lines.push(`- Prep day: ${batchCookDay}. Generate 5-8 prep day tasks for ${batchCookDay} — analyze all recipes and identify everything that can be prepped ahead, ordered by impact (highest weeknight time saved first). Each task must include a time estimate, which specific meals it feeds, and portioning/freezing instructions if that component will be used on days 4+ of the week. ${batchCookDay} is ALSO a regular meal day — it MUST have 4 meals like every other day. Nightly prep tips cover the other 6 evenings — each references the NEXT day's specific meals. Include thaw reminders the night before any meal using a frozen prep-day component.`);
     }
 
-    const allergies = Array.isArray(profile.allergies)
-      ? profile.allergies.map((a: unknown) => (typeof a === "string" ? a : "")).filter(Boolean)
-      : [];
-    const dietaryPreferences = Array.isArray(profile.dietary_preferences)
-      ? profile.dietary_preferences.map((p: unknown) => (typeof p === "string" ? p : "")).filter(Boolean)
-      : [];
-    const preferredCuisines = Array.isArray(profile.preferred_cuisines)
-      ? profile.preferred_cuisines.map((c: unknown) => (typeof c === "string" ? c : "")).filter(Boolean)
-      : [];
     const householdSize = typeof profile.household_size === "number" && profile.household_size > 0
       ? profile.household_size
       : 2;
@@ -145,7 +143,8 @@ export async function buildPersonalization(
       glucoseFriendly,
     };
   } catch (e) {
-    console.warn("Personalization error (falling back to default prompt):", e);
-    return defaults;
+    // Fail closed: carrying on without the profile would silently switch every allergen check off.
+    console.error("Personalization error:", e);
+    throw new Error("Could not load your profile, so allergies cannot be checked. Please try again.");
   }
 }

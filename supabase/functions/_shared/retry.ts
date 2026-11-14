@@ -31,7 +31,7 @@ function isRetryable(err: unknown): boolean {
   const msg = (err instanceof Error ? err.message : String(err)).toLowerCase();
   return (
     // Word-boundary status codes so "at position 5003" doesn't false-match "500".
-    /\b(429|500|502|503|504)\b/.test(msg) ||
+    /\b(408|429|500|502|503|504|524)\b/.test(msg) ||
     msg.includes("truncated") ||
     msg.includes("timeout") ||
     msg.includes("etimedout") ||

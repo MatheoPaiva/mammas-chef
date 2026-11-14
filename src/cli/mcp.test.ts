@@ -15,9 +15,12 @@ vi.mock("./commands", async (importOriginal) => ({
     if (plan === "bad") throw new (await import("./commands")).CliError("No plan \"bad\".");
     return { plan_id: plan };
   }),
+  getProfile: vi.fn(async () => ({ allergies: ["Sesame"] })),
+  updateProfile: vi.fn(async (changes: { allergies?: string[] }) => ({ allergies: changes.allergies })),
 }));
 
 import { buildServer } from "./mcp";
+import { updateProfile } from "./commands";
 
 async function connect() {
   const [client, server] = InMemoryTransport.createLinkedPair();
@@ -49,6 +52,26 @@ describe("mcp server", () => {
     expect(names.some((n: string) => n.includes("delete"))).toBe(false);
     const createPlan = result.tools.find((t: { name: string }) => t.name === "create_plan");
     expect(createPlan.description).toMatch(/allergen_warnings to the user word for word/);
+    const hints = Object.fromEntries(result.tools.map((t: { name: string; annotations: { destructiveHint: boolean } }) => [t.name, t.annotations.destructiveHint]));
+    expect(hints).toMatchObject({ update_profile: true, swap_meal: true, get_profile: false });
+  });
+
+  it("lets an agent add an allergy but never remove one", async () => {
+    const request = await connect();
+    const call = (args: Record<string, unknown>) => request("tools/call", { name: "update_profile", arguments: args });
+    for (const allergies of [[], ["Milk"]]) {
+      const { result } = await call({ allergies });
+      expect(result.isError).toBe(true);
+      expect(JSON.parse(result.content[0].text).error).toMatch(/remove Sesame.*done by the user.*mammaschef profile set --allergies/);
+    }
+    expect((await call({ allergies: ["kiwi"] })).result.content[0].text).toMatch(/Unknown allergy/);
+    expect(updateProfile).not.toHaveBeenCalled();
+
+    const added = await call({ allergies: ["sesame", "dairy"] });
+    expect(added.result.isError).toBeUndefined();
+    expect(updateProfile).toHaveBeenCalledWith(expect.objectContaining({ allergies: ["sesame", "dairy"] }));
+    await call({ household: 3 });
+    expect(updateProfile).toHaveBeenCalledTimes(2);
   });
 
   it("runs overlapping tool calls one at a time and reports failures as tool errors", async () => {

@@ -9,7 +9,7 @@ import { sanitizeInput } from "../_shared/sanitize.ts";
 import { buildPersonalization } from "../_shared/personalization.ts";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { verifyUser } from "../_shared/auth.ts";
-import { checkRateLimit, recordAction } from "../_shared/rateLimit.ts";
+import { releaseAction, reserveAction } from "../_shared/rateLimit.ts";
 import { checkAllergens, markAllergenCautions } from "../_shared/allergens.ts";
 import { validateSwapMeal } from "../_shared/validation.ts";
 import { withRetry } from "../_shared/retry.ts";
@@ -315,6 +315,7 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  let reservationId: string | null = null;
   try {
     const userId = await verifyUser(req);
     if (!userId) {
@@ -323,20 +324,6 @@ Deno.serve(async (req) => {
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
-
-    // Count against swap rate limit (conceptually the same operation)
-    const rateLimit = await checkRateLimit(userId, "swap");
-    if (!rateLimit.allowed) {
-      return new Response(
-        JSON.stringify({ error: "You've reached the daily limit for meal changes. Please try again tomorrow." }),
-        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-      );
-    }
-    // WR-06: recordAction was previously called here, before any work.
-    // Body-parse errors, AI Gateway 500s, and validation failures would
-    // consume the user's daily swap quota even though no successful
-    // regeneration occurred. We now defer recording until after the AI
-    // call completes successfully (see end of try block).
 
     const body = await req.json();
     // batches (D-13, additive/optional): the plan's existing batch table
@@ -372,8 +359,9 @@ Deno.serve(async (req) => {
     const requestModel = isCerebras ? AI_MODEL.slice("cerebras/".length) : AI_MODEL;
 
     const validMealTypes = ["breakfast", "lunch", "dinner", "snack"];
-    const safeMealTypes = (Array.isArray(activeMealTypes) ? activeMealTypes : [])
-      .filter((t: string) => validMealTypes.includes(t));
+    const safeMealTypes = [...new Set<string>(
+      (Array.isArray(activeMealTypes) ? activeMealTypes : []).filter((t: string) => validMealTypes.includes(t)),
+    )];
     if (safeMealTypes.length === 0) {
       return new Response(
         JSON.stringify({ error: "No active meal types specified" }),
@@ -403,13 +391,16 @@ Deno.serve(async (req) => {
     // Summarize remaining meals (title + mealType) for variety avoidance
     const remainingList = Array.isArray(remainingMeals)
       ? remainingMeals
+          .slice(0, 40)
           .map((m: { title?: unknown; mealType?: unknown }) =>
             `${sanitizeInput(m.title, 80)} (${sanitizeInput(m.mealType, 20)})`,
           )
           .join(", ")
       : "";
 
+    // Only this summary is capped: keptTips itself goes back to the client and replaces its saved tips.
     const prepTipsSummary = keptTips
+      .slice(0, 40)
       .map((t) => `${sanitizeInput(t.day, 20)}: ${sanitizeInput(t.tip, 150)}`)
       .join("\n");
 
@@ -417,6 +408,7 @@ Deno.serve(async (req) => {
     // meals can emit "uses" refs that resolve against it.
     const batchTableSummary = Array.isArray(batches)
       ? batches
+          .slice(0, 30)
           .map((b: { id?: unknown; task?: unknown }) =>
             `${sanitizeInput(b.id, 10)} (${sanitizeInput(b.task, 100)})`,
           )
@@ -440,6 +432,19 @@ Deno.serve(async (req) => {
         userMessage += `\n\nUser's request for the new meals: "${safeHint}"`;
       }
     }
+
+    // Count against swap rate limit (conceptually the same operation). WR-06:
+    // the slot is reserved right before the model call and given back in the
+    // catch block if that call fails, so AI Gateway 500s and unparseable
+    // answers do not use up the daily limit.
+    const reservation = await reserveAction(userId, "swap");
+    if (!reservation.allowed) {
+      return new Response(
+        JSON.stringify({ error: "You've reached the daily limit for meal changes. Please try again tomorrow." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+    reservationId = reservation.id;
 
     // --- AI call with retry on transient errors ---
     // Token ceiling (day regen, not a single swap): up to 4 meals + 0-2 prep
@@ -480,7 +485,8 @@ Deno.serve(async (req) => {
         console.error("AI provider error:", response.status, text.slice(0, 500));
         if (response.status === 429) throw new Error("429 Rate limit exceeded");
         if (response.status === 401) throw new Error("AI API key is invalid or missing permissions.");
-        throw new Error(`AI service error (${response.status}): ${text.slice(0, 300)}`);
+        // retry.ts retries on the status code and on the literal "wrong_api_format".
+        throw new Error(`AI service error (${response.status})${text.includes("wrong_api_format") ? " wrong_api_format" : ""}`);
       }
 
       const aiResponse = await response.json();
@@ -491,10 +497,8 @@ Deno.serve(async (req) => {
       return stripNulls(parseAIJson(accumulated, { label: "regenerate-day" }) as Record<string, unknown>);
     }, { label: "regenerate-day" });
 
-    // WR-06: only consume the rate-limit slot after a successful AI call.
-    // Transient AI Gateway 500s and body-parse errors no longer burn
-    // through the user's daily quota.
-    await recordAction(userId, "swap");
+    // WR-06: the AI call succeeded, so from here the reserved slot stays used.
+    reservationId = null;
 
     // --- Post-AI validation ---
 
@@ -606,6 +610,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("regenerate-day error:", e);
+    await releaseAction(reservationId);
     if (e instanceof ParseFailureError) {
       return new Response(
         JSON.stringify({

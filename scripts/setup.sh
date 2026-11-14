@@ -18,6 +18,7 @@ else
 fi
 
 [ -f supabase/functions/.env ] || cp supabase/functions/.env.example supabase/functions/.env
+chmod 600 supabase/functions/.env  # holds your AI key; also repairs installs made before this line existed
 
 echo
 echo "Setup finished. Add your AI key to supabase/functions/.env, then run: npm start"

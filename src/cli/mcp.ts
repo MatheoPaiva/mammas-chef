@@ -45,7 +45,7 @@ export function buildServer() {
   const tool = (name: string, description: string, schema: ReturnType<typeof object>, run: (a: Args, ctx: ToolCtx) => Promise<unknown>, readOnly = false) =>
     server.registerTool(
       name,
-      { description, inputSchema: schema, annotations: { readOnlyHint: readOnly, destructiveHint: false, openWorldHint: false } },
+      { description, inputSchema: schema, annotations: { readOnlyHint: readOnly, destructiveHint: !readOnly, openWorldHint: false } },
       (args: unknown, ctx: ToolCtx) => respond(() => run((args ?? {}) as Args, ctx)),
     );
 
@@ -55,7 +55,7 @@ export function buildServer() {
   tool("get_profile", "Returns the household profile the plans are written for: household size, allergies, diet, cuisines, toddler and glucose options, week start. If allergies is empty, ask the user whether anyone in the household has food allergies before creating a plan.",
     object({}), () => cmd.getProfile(), true);
 
-  tool("update_profile", `Changes the household profile. Only include fields the user asked to change. Allergies replace the whole list; the app knows ${ALLERGY_OPTIONS.join(", ")} (common words like "dairy" and "gluten" are mapped).`,
+  tool("update_profile", `Changes the household profile. Only include fields the user asked to change. To add an allergy, send every allergy already in the profile (see get_profile) plus the new one. You can't remove an allergy: the user has to do that in a terminal or on the website. The app knows ${ALLERGY_OPTIONS.join(", ")} (common words like "dairy" and "gluten" are mapped).`,
     object({
       household: { type: "integer", minimum: 1, maximum: 20 },
       allergies: { type: "array", items: { type: "string" } },
@@ -65,15 +65,26 @@ export function buildServer() {
       glucose: { type: "boolean", description: "Make meals glucose-friendly." },
       week_start: { type: "string", enum: ["Sunday", "Monday"] },
     }),
-    (a) => cmd.updateProfile({
-      household: a.household as number | undefined,
-      allergies: a.allergies as string[] | undefined,
-      diet: a.diet as string[] | undefined,
-      cuisines: a.cuisines as string[] | undefined,
-      toddler: a.toddler as boolean | undefined,
-      glucose: a.glucose as boolean | undefined,
-      weekStart: str(a, "week_start"),
-    }));
+    async (a) => {
+      const allergies = a.allergies as string[] | undefined;
+      if (allergies) {
+        // Like deleting a plan, removing an allergy is kept away from agents: a prompt-injected one could do it unseen.
+        const next = cmd.canonicalize(allergies, ALLERGY_OPTIONS, "allergy", cmd.ALLERGY_ALIASES);
+        const removed = (await cmd.getProfile()).allergies.filter((x: string) => !next.includes(x));
+        if (removed.length) {
+          throw new cmd.CliError(`This would remove ${removed.join(", ")} from the allergy list, and nothing was changed. Removing an allergy has to be done by the user: they can run \`mammaschef profile set --allergies ...\` in a terminal or use the website. To add an allergy, send the current list plus the new one.`);
+        }
+      }
+      return cmd.updateProfile({
+        household: a.household as number | undefined,
+        allergies,
+        diet: a.diet as string[] | undefined,
+        cuisines: a.cuisines as string[] | undefined,
+        toddler: a.toddler as boolean | undefined,
+        glucose: a.glucose as boolean | undefined,
+        weekStart: str(a, "week_start"),
+      });
+    });
 
   tool("create_plan", `Writes and saves a new week of meals with the app's AI, for the household in the saved profile, plus its shopping list. Takes about a minute; don't call it again while it runs. ${SAFETY}`,
     object({

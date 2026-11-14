@@ -2,7 +2,7 @@ import { sanitizeInput } from "../_shared/sanitize.ts";
 import { buildPersonalization } from "../_shared/personalization.ts";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { verifyUser } from "../_shared/auth.ts";
-import { checkRateLimit, recordAction } from "../_shared/rateLimit.ts";
+import { releaseAction, reserveAction } from "../_shared/rateLimit.ts";
 import { validateSwapSchema } from "../_shared/schemas.ts";
 import { checkAllergens, markAllergenCautions } from "../_shared/allergens.ts";
 import { validateSwapMeal } from "../_shared/validation.ts";
@@ -354,6 +354,7 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  let reservationId: string | null = null;
   try {
     // Server-side auth: verify JWT via Supabase Auth (gateway verify_jwt disabled)
     const userId = await verifyUser(req);
@@ -363,18 +364,6 @@ Deno.serve(async (req) => {
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-
-    // Per-user rate limiting
-    const rateLimit = await checkRateLimit(userId, "swap");
-    if (!rateLimit.allowed) {
-      return new Response(
-        JSON.stringify({ error: "You've reached the daily limit for meal swaps. Please try again tomorrow." }),
-        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // FX-5: recordAction is deferred to AFTER the AI call succeeds (see below) so
-    // failed swaps no longer burn a daily rate-limit slot (WR-06 pattern).
 
     const body = await req.json();
     // dependentSource (D-11, additive/optional): when the outgoing meal is a
@@ -432,14 +421,17 @@ Deno.serve(async (req) => {
     // Summarize remaining meals to avoid repeats (title + mealType only, to keep payload small)
     const remainingList = Array.isArray(remainingMeals)
       ? remainingMeals
+          .slice(0, 40)
           .map((m: { title?: unknown; mealType?: unknown }) =>
             `${sanitizeInput(m.title, 80)} (${sanitizeInput(m.mealType, 20)})`
           )
           .join(", ")
       : "";
 
-    // Summarize the kept prep tips as read-only context
+    // Summarize the kept prep tips as read-only context. Only this summary is
+    // capped: keptTips itself goes back to the client and replaces its saved tips.
     const prepTipsSummary = keptTips
+      .slice(0, 40)
       .map((t) => `${sanitizeInput(t.day, 20)}: ${sanitizeInput(t.tip, 150)}`)
       .join("\n");
 
@@ -516,7 +508,8 @@ Deno.serve(async (req) => {
           console.error("AI provider error:", response.status, text.slice(0, 500));
           if (response.status === 429) throw new Error("429 Rate limit exceeded");
           if (response.status === 401) throw new Error("AI API key is invalid or missing permissions.");
-          throw new Error(`AI service error (${response.status}): ${text.slice(0, 300)}`);
+          // retry.ts retries on the status code and on the literal "wrong_api_format".
+          throw new Error(`AI service error (${response.status})${text.includes("wrong_api_format") ? " wrong_api_format" : ""}`);
         }
 
         const aiResponse = await response.json();
@@ -542,6 +535,18 @@ Deno.serve(async (req) => {
         }) as Record<string, unknown>);
       }, { label: "swap-meal" });
 
+    // Per-user rate limiting. FX-5 / WR-06: the slot is reserved right before
+    // the model call and given back in the catch block if that call fails, so a
+    // failed swap does not use up the daily limit.
+    const reservation = await reserveAction(userId, "swap");
+    if (!reservation.allowed) {
+      return new Response(
+        JSON.stringify({ error: "You've reached the daily limit for meal swaps. Please try again tomorrow." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    reservationId = reservation.id;
+
     // Truncation-aware shell (OUTSIDE withRetry — a truncated response needs a
     // larger request body, not a transient retry). Fires AT MOST once: if the
     // higher-budget retry also truncates, its TruncationError propagates to the
@@ -558,8 +563,8 @@ Deno.serve(async (req) => {
       }
     }
 
-    // FX-5: only consume the rate-limit slot after the AI call succeeds.
-    await recordAction(userId, "swap");
+    // FX-5: the AI call succeeded, so from here the reserved slot stays used.
+    reservationId = null;
 
     // Merge the model's newPrepTips delta into the kept tips and answer in the
     // client contract's updatedPrepTips. Unconditional: a Gateway-path model
@@ -651,6 +656,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error("swap-meal error:", e);
+    await releaseAction(reservationId);
     if (e instanceof TruncationError) {
       return new Response(
         JSON.stringify({

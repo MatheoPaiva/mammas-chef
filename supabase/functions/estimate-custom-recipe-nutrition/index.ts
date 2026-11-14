@@ -1,5 +1,6 @@
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { verifyUser } from "../_shared/auth.ts";
+import { reserveAction } from "../_shared/rateLimit.ts";
 import { parseAIJson } from "../_shared/jsonResponsePrompt.ts";
 
 import { AI_GATEWAY_URL, aiGatewayConfig, tokenBudgetField } from "../_shared/aiGateway.ts";
@@ -68,6 +69,14 @@ Deno.serve(async (req) => {
       );
     }
 
+    const userMessage = JSON.stringify({ title, servings, ingredients, steps }, null, 2);
+    if (userMessage.length > 20_000) {
+      return new Response(
+        JSON.stringify({ error: "This recipe is too long to estimate nutrition for. Please shorten it." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
     const cerebrasKey = Deno.env.get("CEREBRAS_API_KEY");
     let API_KEY: string;
     let AI_MODEL: string;
@@ -78,6 +87,15 @@ Deno.serve(async (req) => {
       ({ apiKey: API_KEY, model: AI_MODEL } = aiGatewayConfig("gpt-4.1-mini"));
     }
     const isCerebras = AI_MODEL.startsWith("cerebras/");
+
+    // Reserved right before the model call and never given back: a refund on
+    // failure would let a caller loop answers that fail to parse, for free.
+    if (!(await reserveAction(userId, "nutrition")).allowed) {
+      return new Response(
+        JSON.stringify({ error: "You've reached the daily limit for nutrition estimates. Please try again tomorrow." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
     const response = await fetch(isCerebras ? CEREBRAS_API_URL : AI_GATEWAY_URL, {
       method: "POST",
@@ -90,10 +108,7 @@ Deno.serve(async (req) => {
         model: isCerebras ? AI_MODEL.slice("cerebras/".length) : AI_MODEL,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
-          {
-            role: "user",
-            content: JSON.stringify({ title, servings, ingredients, steps }, null, 2),
-          },
+          { role: "user", content: userMessage },
         ],
         // Cerebras reasoning tokens count against the budget, so it needs a higher ceiling.
         ...(isCerebras

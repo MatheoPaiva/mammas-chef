@@ -1,149 +1,17 @@
 /**
- * Tests for the allergen keyword checker.
- *
- * The checkAllergens function lives in supabase/functions/_shared/allergens.ts
- * (Deno edge function). Since it's pure logic with no Deno-specific deps, we
- * copy-import the core logic here for testing under Vitest.
+ * Tests for the allergen keyword checker in
+ * supabase/functions/_shared/allergens.ts. It is pure logic with no Deno
+ * dependencies, so the real module is imported here (the app imports it too).
  */
 import { describe, it, expect } from "vitest";
+import { checkAllergens as checkRecipeAllergens } from "../../supabase/functions/_shared/allergens";
 
-// ---------------------------------------------------------------------------
-// Inline the allergen checker to avoid Deno import issues in Vitest.
-// This mirrors supabase/functions/_shared/allergens.ts exactly.
-// ---------------------------------------------------------------------------
-
-interface AllergenDef {
-  keywords: string[];
-  falsePositives?: string[];
-}
-
-const ALLERGEN_MAP: Record<string, AllergenDef> = {
-  Nuts: {
-    keywords: [
-      "almond", "walnut", "pecan", "cashew", "pistachio", "hazelnut",
-      "macadamia", "pine nut", "brazil nut", "nut butter", "praline",
-      "marzipan", "frangipane", "nougat", "chestnut", "filbert",
-      "nut milk", "almond milk", "cashew milk", "almond flour",
-      "almond butter", "cashew butter",
-    ],
-    falsePositives: ["butternut", "nutmeg", "coconut", "donut", "doughnut", "water chestnut"],
-  },
-  Peanuts: {
-    keywords: [
-      "peanut", "peanut butter", "peanut oil", "groundnut",
-      "arachis", "monkey nut",
-    ],
-  },
-  Shellfish: {
-    keywords: [
-      "shrimp", "prawn", "crab", "lobster", "crawfish", "crayfish",
-      "scallop", "mussel", "clam", "oyster", "langoustine", "cockle",
-      "abalone", "squid", "calamari", "octopus",
-    ],
-  },
-  Eggs: {
-    keywords: [
-      "egg", "eggs", "egg white", "egg yolk", "meringue", "mayonnaise",
-      "mayo", "aioli", "frittata", "quiche",
-    ],
-    falsePositives: ["eggplant", "egg noodle"],
-  },
-  Soy: {
-    keywords: [
-      "soy", "soy sauce", "soya", "tofu", "tempeh", "edamame",
-      "miso", "tamari", "soybean", "soy milk",
-    ],
-  },
-  Wheat: {
-    keywords: [
-      "wheat", "flour", "bread", "pasta", "noodle", "couscous",
-      "bulgur", "farro", "seitan", "panko", "breadcrumb",
-      "tortilla", "pita", "naan", "cracker", "croissant",
-      "all-purpose flour", "bread flour", "semolina",
-    ],
-    falsePositives: [
-      "rice flour", "almond flour", "coconut flour", "oat flour",
-      "chickpea flour", "corn tortilla", "rice noodle",
-      "buckwheat",
-    ],
-  },
-  Fish: {
-    keywords: [
-      "salmon", "tuna", "cod", "tilapia", "halibut", "trout",
-      "sardine", "anchovy", "mackerel", "swordfish", "mahi",
-      "snapper", "bass", "catfish", "haddock", "sole", "perch",
-      "fish sauce", "fish fillet", "white fish", "smoked fish",
-    ],
-    falsePositives: ["swedish fish", "goldfish cracker"],
-  },
-  Sesame: {
-    keywords: [
-      "sesame", "sesame oil", "sesame seed", "tahini", "halva",
-      "hummus",
-    ],
-  },
-  Milk: {
-    keywords: [
-      "milk", "cheese", "butter", "cream", "yogurt", "yoghurt",
-      "whey", "casein", "ghee", "ricotta", "mozzarella", "parmesan",
-      "cheddar", "feta", "gouda", "brie", "camembert", "gruyère",
-      "gruyere", "mascarpone", "cottage cheese", "cream cheese",
-      "sour cream", "heavy cream", "half-and-half", "whipped cream",
-      "buttermilk", "kefir", "paneer",
-    ],
-    falsePositives: [
-      "coconut milk", "almond milk", "oat milk", "soy milk",
-      "cashew milk", "rice milk", "coconut cream", "coconut yogurt",
-      "nut butter", "peanut butter", "almond butter", "apple butter",
-      "cocoa butter", "shea butter",
-    ],
-  },
-};
-
-interface AllergenViolation {
-  allergen: string;
-  recipeTitle: string;
-  ingredient: string;
-  matchedKeyword: string;
-}
-
-function checkAllergens(
-  recipes: Array<{ title: string; ingredients: string[] }>,
-  userAllergens: string[],
-): AllergenViolation[] {
-  if (!userAllergens || userAllergens.length === 0) return [];
-
-  const violations: AllergenViolation[] = [];
-
-  for (const allergen of userAllergens) {
-    const def = ALLERGEN_MAP[allergen];
-    if (!def) continue;
-
-    for (const recipe of recipes) {
-      for (const ingredient of recipe.ingredients) {
-        const lower = ingredient.toLowerCase();
-
-        if (def.falsePositives?.some((fp) => lower.includes(fp))) {
-          continue;
-        }
-
-        for (const keyword of def.keywords) {
-          if (lower.includes(keyword)) {
-            violations.push({
-              allergen,
-              recipeTitle: recipe.title,
-              ingredient,
-              matchedKeyword: keyword,
-            });
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  return violations;
-}
+/** These tests list ingredients as plain strings; the checker takes `{ name }` objects. */
+const checkAllergens = (recipes: Array<{ title: string; ingredients: string[] }>, userAllergens: string[]) =>
+  checkRecipeAllergens(
+    recipes.map((r) => ({ title: r.title, ingredients: r.ingredients.map((name) => ({ name })) })),
+    userAllergens,
+  );
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -276,6 +144,37 @@ describe("checkAllergens", () => {
   it("does NOT flag buckwheat for wheat allergy", () => {
     const recipes = [{ title: "Soba", ingredients: ["8 oz buckwheat noodles", "1 cup broth"] }];
     expect(checkAllergens(recipes, ["Wheat"])).toEqual([]);
+  });
+
+  // --- A real allergen next to a false-positive phrase ---
+
+  it("flags almond in coconut almond granola for nut allergy", () => {
+    const recipes = [{ title: "Granola", ingredients: ["1 cup coconut almond granola"] }];
+    const result = checkAllergens(recipes, ["Nuts"]);
+    expect(result.length).toBe(1);
+    expect(result[0].matchedKeyword).toBe("almond");
+  });
+
+  it("flags eggs listed next to eggplant for egg allergy", () => {
+    const recipes = [{ title: "Bake", ingredients: ["eggplant and 2 eggs"] }];
+    expect(checkAllergens(recipes, ["Eggs"]).length).toBe(1);
+  });
+
+  it("flags cream cheese listed next to peanut butter for milk allergy", () => {
+    const recipes = [{ title: "Dip", ingredients: ["peanut butter and cream cheese"] }];
+    const result = checkAllergens(recipes, ["Milk"]);
+    expect(result.length).toBe(1);
+    expect(result[0].matchedKeyword).toBe("cheese");
+  });
+
+  it("flags butter listed next to coconut milk for milk allergy", () => {
+    const recipes = [{ title: "Sauce", ingredients: ["butter, melted, or coconut milk"] }];
+    expect(checkAllergens(recipes, ["Milk"]).length).toBe(1);
+  });
+
+  it("flags egg noodles for egg allergy", () => {
+    const recipes = [{ title: "Stroganoff", ingredients: ["8 oz egg noodles"] }];
+    expect(checkAllergens(recipes, ["Eggs"]).length).toBe(1);
   });
 
   // --- Multiple allergens ---

@@ -17,6 +17,16 @@ export default defineConfig(() => ({
   },
   plugins: [
     react(),
+    // Vite 5 bundles a vulnerable launch-editor and this route accepts cross-site GETs; nothing here uses it.
+    {
+      name: "block-open-in-editor",
+      configureServer(server) {
+        server.middlewares.use("/__open-in-editor", (_req, res) => {
+          res.statusCode = 403;
+          res.end();
+        });
+      },
+    },
     ...(process.env.SENTRY_AUTH_TOKEN
       ? [sentryVitePlugin({
           org: process.env.SENTRY_ORG,

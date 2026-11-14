@@ -12,7 +12,7 @@
 /** Each entry: allergen name → { keywords to match, falsePositives to exclude } */
 interface AllergenDef {
   keywords: string[];
-  /** Substrings that would falsely trigger a keyword match. */
+  /** Phrases that look like a keyword but are not the allergen; cut out of the ingredient before matching. */
   falsePositives?: string[];
 }
 
@@ -45,7 +45,7 @@ const ALLERGEN_MAP: Record<string, AllergenDef> = {
       "egg", "eggs", "egg white", "egg yolk", "meringue", "mayonnaise",
       "mayo", "aioli", "frittata", "quiche",
     ],
-    falsePositives: ["eggplant", "egg noodle"],
+    falsePositives: ["eggplant"],
   },
   Soy: {
     keywords: [
@@ -63,6 +63,7 @@ const ALLERGEN_MAP: Record<string, AllergenDef> = {
     falsePositives: [
       "rice flour", "almond flour", "coconut flour", "oat flour",
       "chickpea flour", "corn tortilla", "rice noodle",
+      "buckwheat flour", "buckwheat noodle",  // listed before "buckwheat" so the whole phrase is cut out
       "buckwheat",  // buckwheat is NOT wheat
     ],
   },
@@ -94,6 +95,7 @@ const ALLERGEN_MAP: Record<string, AllergenDef> = {
       "coconut milk", "almond milk", "oat milk", "soy milk",
       "cashew milk", "rice milk", "coconut cream", "coconut yogurt",
       "nut butter", "peanut butter", "almond butter", "apple butter",
+      "walnut butter", "hazelnut butter", "coconut butter",
       "cocoa butter", "shea butter",
     ],
   },
@@ -137,13 +139,11 @@ export function checkAllergens(
 
     for (const recipe of recipes) {
       for (const ingredient of recipe.ingredients) {
-        const lower = ingredient.name.toLowerCase();
-
-        // Check false positives first — if the ingredient matches a false
-        // positive, skip this ingredient entirely for this allergen
-        if (def.falsePositives?.some((fp) => lower.includes(fp))) {
-          continue;
-        }
+        // Cut the false-positive phrases out, then scan what is left: skipping the
+        // whole ingredient would hide a real allergen ("coconut almond granola").
+        // Only at the start of a word, so "oat milk" does not cut "goat milk".
+        let lower = ingredient.name.toLowerCase();
+        for (const fp of def.falsePositives ?? []) lower = lower.replace(new RegExp(`\\b${fp}`, "g"), " ");
 
         // Check keywords
         for (const keyword of def.keywords) {
@@ -162,6 +162,25 @@ export function checkAllergens(
   }
 
   return violations;
+}
+
+/**
+ * True only for a stub of a recipe the request really pinned (same id, or same
+ * title). `pinned` comes from the model, so alone it must not exempt a meal
+ * from the allergen scan.
+ */
+export function isPinnedStub(
+  meal: { pinned?: unknown; id?: unknown; title?: unknown },
+  pinnedRecipes: unknown,
+): boolean {
+  if (!meal.pinned || !Array.isArray(pinnedRecipes)) return false;
+  const title = typeof meal.title === "string" ? meal.title.trim().toLowerCase() : "";
+  // Same rule the client uses to swap a stub for the real recipe (mergePinnedStubs):
+  // anything it would not replace stays in the plan, so it must be scanned.
+  return pinnedRecipes.some((r) =>
+    (!!meal.id && r?.id === meal.id) ||
+    (!!title && typeof r?.title === "string" && r.title.trim().toLowerCase() === title)
+  );
 }
 
 /**
