@@ -14,6 +14,11 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    // Placeholders so the tests run on a fresh clone and in CI, where there is no .env.local.
+    env: {
+      VITE_SUPABASE_URL: "http://127.0.0.1:54321",
+      VITE_SUPABASE_PUBLISHABLE_KEY: "test-publishable-key",
+    },
     // Node 22.4+ ships an experimental built-in `localStorage` global that
     // takes precedence over jsdom's implementation and is missing methods
     // (e.g. `.clear`) unless backed by `--localstorage-file`. Disable it in
