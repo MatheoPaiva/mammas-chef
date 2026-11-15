@@ -17,7 +17,7 @@ export default defineConfig(() => ({
   },
   plugins: [
     react(),
-    // Vite 5 bundles a vulnerable launch-editor and this route accepts cross-site GETs; nothing here uses it.
+    // Nothing here uses this route. It accepts cross-site GETs and opens files in an editor, and has had command-injection bugs on Windows.
     {
       name: "block-open-in-editor",
       configureServer(server) {
