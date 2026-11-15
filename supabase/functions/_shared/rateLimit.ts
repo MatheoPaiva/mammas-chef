@@ -2,9 +2,13 @@ import { createClient, type SupabaseClient } from "https://esm.sh/@supabase/supa
 
 type ActionType = "generate" | "swap" | "shopping" | "nutrition";
 
-const LIMITS: Record<ActionType, { max: number; eventName: string }> = {
-  generate: { max: 10, eventName: "generate_meal_plan" },
-  swap:     { max: 20, eventName: "meal_swap" },
+type Limit = { max: number; eventName: string };
+
+const LIMITS: Record<ActionType, Limit & { attempts?: Limit }> = {
+  // `attempts` counts every run, failed or not, and is never given back. A failed
+  // run frees its slot, so without this a loop of failing, billed calls has no end.
+  generate: { max: 10, eventName: "generate_meal_plan", attempts: { max: 30, eventName: "generate_meal_plan_attempt" } },
+  swap:     { max: 20, eventName: "meal_swap", attempts: { max: 60, eventName: "meal_swap_attempt" } },
   // Generous on purpose: the shopping list runs on every planner save, and a
   // nutrition 429 blocks saving a custom recipe.
   shopping:  { max: 60, eventName: "generate_shopping_list" },
@@ -35,9 +39,15 @@ export async function reserveAction(
   action: ActionType,
   client?: SupabaseClient,
 ): Promise<Reservation> {
-  const { max, eventName } = LIMITS[action];
+  const limit = LIMITS[action];
   const supabase = client ?? serviceClient();
+  if (limit.attempts && !(await reserve(userId, limit.attempts, supabase)).allowed) {
+    return { allowed: false, id: null };
+  }
+  return reserve(userId, limit, supabase);
+}
 
+async function reserve(userId: string, { max, eventName }: Limit, supabase: SupabaseClient): Promise<Reservation> {
   const { data, error: insertError } = await supabase
     .from("app_logs")
     .insert({

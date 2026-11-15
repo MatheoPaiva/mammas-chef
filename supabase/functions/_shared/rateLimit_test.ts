@@ -3,7 +3,7 @@ import { releaseAction, reserveAction } from "./rateLimit.ts";
 
 type Row = { id: string; user_id: string; event_name: string };
 
-/** In-memory stand-in for the app_logs calls rateLimit.ts makes. Counts wait for `gate`. */
+/** In-memory stand-in for the app_logs calls rateLimit.ts makes. Slot counts wait for `gate`; attempt counts do not. */
 function fakeClient(opts: { gate?: Promise<void>; countError?: boolean } = {}) {
   const rows: Row[] = [];
   let nextId = 0;
@@ -26,7 +26,7 @@ function fakeClient(opts: { gate?: Promise<void>; countError?: boolean } = {}) {
         },
         gte: () => query,
         then: (resolve: (result: { count: number | null; error: { message: string } | null }) => void) =>
-          Promise.resolve(opts.gate).then(() =>
+          Promise.resolve(filters.event_name.endsWith("_attempt") ? undefined : opts.gate).then(() =>
             resolve(
               opts.countError
                 ? { count: null, error: { message: "app_logs is down" } }
@@ -47,7 +47,8 @@ function fakeClient(opts: { gate?: Promise<void>; countError?: boolean } = {}) {
       },
     }),
   });
-  return { rows, client: { from } as unknown as Parameters<typeof reserveAction>[2] };
+  const slots = () => rows.filter((r) => !r.event_name.endsWith("_attempt"));
+  return { rows, slots, client: { from } as unknown as Parameters<typeof reserveAction>[2] };
 }
 
 const SWAP_MAX = 20;
@@ -55,27 +56,27 @@ const SWAP_MAX = 20;
 Deno.test("reserveAction allows at most the daily max when requests overlap", async () => {
   let openGate = () => {};
   const gate = new Promise<void>((resolve) => { openGate = resolve; });
-  const { rows, client } = fakeClient({ gate });
+  const { slots, client } = fakeClient({ gate });
 
-  // Every request writes its row, and only then does any count come back.
+  // Every request writes its slot row, and only then does any slot count come back.
   const pending = Array.from({ length: SWAP_MAX + 15 }, () => reserveAction("user-1", "swap", client));
   await new Promise((resolve) => setTimeout(resolve, 0));
-  assertEquals(rows.length, SWAP_MAX + 15);
+  assertEquals(slots().length, SWAP_MAX + 15);
   openGate();
 
   const allowed = (await Promise.all(pending)).filter((r) => r.allowed);
   assertEquals(allowed.length <= SWAP_MAX, true, `allowed ${allowed.length}`);
-  assertEquals(rows.length, allowed.length, "a rejected request must not keep its row");
+  assertEquals(slots().length, allowed.length, "a rejected request must not keep its row");
 });
 
 Deno.test("reserveAction stops at the daily max, and a released slot can be used again", async () => {
-  const { rows, client } = fakeClient();
+  const { slots, client } = fakeClient();
   const held = [];
   for (let i = 0; i < SWAP_MAX; i++) held.push(await reserveAction("user-1", "swap", client));
   assertEquals(held.every((r) => r.allowed && r.id !== null), true);
 
   assertEquals(await reserveAction("user-1", "swap", client), { allowed: false, id: null });
-  assertEquals(rows.length, SWAP_MAX);
+  assertEquals(slots().length, SWAP_MAX);
   // Another user, and another action, have their own count.
   assertEquals((await reserveAction("user-2", "swap", client)).allowed, true);
   assertEquals((await reserveAction("user-1", "generate", client)).allowed, true);
@@ -87,4 +88,17 @@ Deno.test("reserveAction stops at the daily max, and a released slot can be used
 Deno.test("reserveAction still allows the request when the count query fails", async () => {
   const { client } = fakeClient({ countError: true });
   assertEquals((await reserveAction("user-1", "swap", client)).allowed, true);
+});
+
+Deno.test("reserveAction caps attempts even when every failed run gave its slot back", async () => {
+  const { slots, client } = fakeClient();
+  const GENERATE_ATTEMPTS = 30;
+  for (let i = 0; i < GENERATE_ATTEMPTS; i++) {
+    const run = await reserveAction("user-1", "generate", client);
+    assertEquals(run.allowed, true, `attempt ${i + 1}`);
+    await releaseAction(run.id, client);
+  }
+  assertEquals(slots().length, 0);
+  assertEquals(await reserveAction("user-1", "generate", client), { allowed: false, id: null });
+  assertEquals((await reserveAction("user-2", "generate", client)).allowed, true);
 });
