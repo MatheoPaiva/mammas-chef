@@ -90,7 +90,7 @@ For **Claude Code**:
 claude mcp add mammaschef -- mammaschef mcp
 ```
 
-Then ask things like "plan next week for two adults and a toddler" or "what do I need to buy?". The agent can read and change your profile, create and edit plans, read shopping lists, search recipes and save favorites. It can't delete plans; only `mammaschef delete <plan> --yes` in a terminal can.
+Then ask things like "plan next week for two adults and a toddler" or "what do I need to buy?". The agent can read and change your profile, create and edit plans, read shopping lists, search recipes and save favorites. Its tools can add an allergy but can't remove one; do that yourself with `mammaschef profile set --allergies ...` in a terminal or on the website. An agent that can run terminal commands could still run that command, so check your allergy list if an agent has been reading pages you don't trust. It can't delete plans either; only `mammaschef delete <plan> --yes` in a terminal can.
 
 **What's been tested:** Claude Code (with Claude Opus 5.5 and Claude Haiku 5.5 as the agent's model) and Cerebras as the planning AI. Other agents, including OpenClaw and Hermes, haven't been tested yet. Agents that can run terminal commands can also call `mammaschef ... --json` directly.
 
@@ -109,8 +109,9 @@ The app guards against allergens in three ways: it tells the AI which foods to a
 ## Good to know
 
 - **Privacy:** the app doesn't report back to anyone. Meal requests and your preferences, including allergies, go to the AI provider you choose. If you connect an AI agent, everything it reads, including your plans, household details and allergies, also goes to that agent's provider. Web fonts load from Google. Error reporting is off unless you set your own `VITE_SENTRY_DSN`.
-- **Daily limits:** each account can generate 10 plans and swap 20 meals a day (regenerating a day counts as a swap), which helps protect your AI bill and stops a looping agent from running it up. Change them in `supabase/functions/_shared/rateLimit.ts`.
-- **Keep it on your computer:** this setup is meant for personal use and isn't hardened for the public internet.
+- **Daily limits:** each account can generate 10 plans and swap 20 meals a day (regenerating a day counts as a swap), plus 60 AI shopping lists and 60 nutrition estimates, which helps protect your AI bill and stops a looping agent from running it up. A plan or swap that fails doesn't use one up, but failed tries are capped too, at 30 plan runs and 60 swap runs a day. Change them in `supabase/functions/_shared/rateLimit.ts`.
+- **Keep it on your computer:** this setup is meant for personal use and isn't hardened for the public internet. By default the local database (Supabase) listens on all network interfaces, not just your computer, and it uses Supabase's well-known default password and keys, so other devices on the same Wi-Fi can reach it. `mammaschef doctor` reminds you when this is the case. Docker Desktop can only limit these ports to your computer on a Business plan, so either run the app only on a network you trust (and `mammaschef stop` elsewhere), or block incoming connections to Docker in your firewall. Turning a firewall on is not enough by itself: Docker usually has to be blocked by name. To test, open `http://<your computer's network address>:54323` on a phone on the same Wi-Fi; it should not load.
+- **Hosted Supabase:** if you point the app at a hosted Supabase project instead, turn off new sign-ups in the Supabase dashboard after creating your own account, because every account that signs up can spend your AI key. Don't push this repo's `supabase/config.toml` to a hosted project; it turns email confirmation off.
 - **Port conflict:** if `npm run setup` says a port is in use, another Supabase project is probably running. Stop it with `npx supabase stop --project-id <its id>`.
 
 ## Development

@@ -8,6 +8,7 @@ vi.mock("@/integrations/supabase/client", () => ({ supabase: {} }));
 
 import { parseCli, run, errorMessage } from "./cli";
 import { CliError, canonicalize, planSummary, secondOpinionCheck, NOTICE } from "./commands";
+import { exposedPorts } from "./stack";
 import { fileSessionStorage } from "@/integrations/supabase/fileSessionStorage";
 import { ALLERGY_OPTIONS } from "@/constants/preferences";
 import type { MealPlanResponse, MealRecipe } from "@/types/mealPlan";
@@ -53,6 +54,21 @@ describe("errorMessage", () => {
   it("turns connection failures into a start hint", () => {
     expect(errorMessage(new TypeError("fetch failed"))).toMatch(/mammaschef start/);
     expect(errorMessage(new CliError("Daily limit reached"))).toBe("Daily limit reached");
+  });
+});
+
+describe("exposedPorts", () => {
+  it("finds ports Docker publishes on every network interface", () => {
+    expect(exposedPorts("0.0.0.0:54321->8000/tcp, [::]:54321->8000/tcp")).toEqual(["54321"]);
+    expect(exposedPorts("0.0.0.0:54322->5432/tcp, :::54322->5432/tcp\n8080/tcp\n\n[::]:54323->3000/tcp")).toEqual(["54322", "54323"]);
+  });
+
+  it("accepts localhost-only and unpublished ports", () => {
+    for (const ok of ["127.0.0.1:54321->8000/tcp", "[::1]:54321->8000/tcp", "8080/tcp", ""]) expect(exposedPorts(ok)).toEqual([]);
+  });
+
+  it("counts a port bound to the computer's network address as open", () => {
+    expect(exposedPorts("192.168.1.20:54322->5432/tcp, 127.0.0.1:54321->8000/tcp")).toEqual(["54322"]);
   });
 });
 

@@ -1,11 +1,12 @@
 // Local stack and account commands: init, start, stop, doctor. Run from the repo root.
 import { spawn, spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, openSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, openSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { supabase } from "@/integrations/supabase/client";
 import { CliError, secondOpinionCheck } from "./commands";
 
 const FUNCTIONS_ENV = "supabase/functions/.env";
 const STATE_DIR = ".mammaschef"; // gitignored: PID and log of the detached functions server
+const PROJECT_ID = "mammas-chef"; // project_id in supabase/config.toml; its containers are named supabase_*_<id>
 const PID_FILE = `${STATE_DIR}/functions.pid`;
 // Absolute, so an agent reading the message knows where it is.
 export const FUNCTIONS_LOG = `${process.cwd()}/${STATE_DIR}/functions.log`;
@@ -38,8 +39,11 @@ export async function start() {
   if (!hasAiKey()) throw new CliError(`No AI key found. Add CEREBRAS_API_KEY (or AI_API_KEY) to ${FUNCTIONS_ENV}. Run \`npm run setup\` first if that file is missing.`);
   if (!(await databaseUp())) runVisible("npx", ["supabase", "start"]);
   if (!(await functionsUp())) {
-    mkdirSync(STATE_DIR, { recursive: true });
-    const log = openSync(FUNCTIONS_LOG, "a");
+    mkdirSync(STATE_DIR, { recursive: true, mode: 0o700 });
+    const log = openSync(FUNCTIONS_LOG, "a", 0o600); // the log can name the household's allergens
+    // The modes above only apply on creation; this repairs a directory and log made before they were set.
+    chmodSync(STATE_DIR, 0o700);
+    chmodSync(FUNCTIONS_LOG, 0o600);
     const child = spawn("npx", ["supabase", "functions", "serve", "--env-file", FUNCTIONS_ENV], {
       detached: true, // own process group, so `stop` can end it and its children together
       stdio: ["ignore", log, log],
@@ -65,9 +69,17 @@ export async function stop() {
   return { database: "stopped", functions: "stopped" };
 }
 
+/** Host ports that `docker ps --format {{.Ports}}` output shows published on anything but this computer's loopback address. */
+export function exposedPorts(dockerPorts: string) {
+  const published = [...dockerPorts.matchAll(/(\S+?):(\d+(?:-\d+)?)->/g)];
+  return [...new Set(published.filter((m) => !/^(127\.|\[::1\]$)/.test(m[1])).map((m) => m[2]))];
+}
+
 export async function doctor() {
   const nodeMajor = Number(process.versions.node.split(".")[0]);
   const dockerOk = spawnSync("docker", ["info"], { stdio: "ignore" }).status === 0;
+  // No output (Docker missing or stopped) means nothing is published; the docker check reports that.
+  const exposed = exposedPorts(spawnSync("docker", ["ps", "--filter", `name=_${PROJECT_ID}`, "--format", "{{.Ports}}"], { encoding: "utf8" }).stdout ?? "");
   const dbOk = await databaseUp();
   const fnOk = dbOk && (await functionsUp());
   let loginOk = false;
@@ -94,6 +106,12 @@ export async function doctor() {
   return {
     ok: checks.every((c) => c.ok),
     checks: checks.map((c) => (c.ok ? { check: c.check, ok: true, detail: c.detail } : c)),
+    // A warning, not a failed check: Docker Desktop only limits published ports to this computer on a
+    // Business plan, and blocking them in a firewall does not change what Docker reports.
+    network_warning: exposed.length
+      ? `Docker publishes ports ${exposed.join(", ")} to your whole network, and the local database uses Supabase's well-known default password and keys. ` +
+        "Only run this on a network you trust, or block incoming connections to Docker in your firewall. This reminder stays either way."
+      : null,
     second_opinion_check: secondOpinion,
     second_opinion_fix: secondOpinion === "off" ? `Optional: add AI_GATEWAY_API_KEY to ${FUNCTIONS_ENV} for a second allergen check.` : null,
   };

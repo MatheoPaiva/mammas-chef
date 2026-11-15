@@ -40,7 +40,7 @@ export async function getProfile() {
 }
 
 // Common words people (and agents) use for the app's allergy options.
-const ALLERGY_ALIASES: Record<string, string> = {
+export const ALLERGY_ALIASES: Record<string, string> = {
   dairy: "Milk", lactose: "Milk", nut: "Nuts", "tree nut": "Nuts", "tree nuts": "Nuts",
   peanut: "Peanuts", egg: "Eggs", gluten: "Wheat", shellfish: "Shellfish", sesame: "Sesame",
 };

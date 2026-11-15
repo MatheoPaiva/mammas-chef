@@ -33,3 +33,8 @@ export function captureUnlessRateLimit(
   }
   Sentry.captureMessage(message, context);
 }
+
+/** Supabase email links carry session tokens in the URL fragment; drop it before a URL goes to Sentry. */
+export function stripUrlFragment(url: string): string {
+  return url.split("#")[0];
+}

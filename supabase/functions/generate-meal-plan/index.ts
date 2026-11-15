@@ -2,9 +2,9 @@ import { sanitizeInput } from "../_shared/sanitize.ts";
 import { buildPersonalization } from "../_shared/personalization.ts";
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { verifyUser } from "../_shared/auth.ts";
-import { checkRateLimit, recordAction } from "../_shared/rateLimit.ts";
+import { releaseAction, reserveAction } from "../_shared/rateLimit.ts";
 import { validateMealPlanSchema, validatePrepTipsSchema } from "../_shared/schemas.ts";
-import { checkAllergens, markAllergenCautions } from "../_shared/allergens.ts";
+import { checkAllergens, isPinnedStub, markAllergenCautions } from "../_shared/allergens.ts";
 import { judgeAllergens } from "../_shared/allergenJudge.ts";
 import { validateMealPlan, formatViolationsForRetry, rotateDaysToStart, contradictoryNutritionTags } from "../_shared/validation.ts";
 import { withRetry } from "../_shared/retry.ts";
@@ -1646,7 +1646,7 @@ async function generateCompletion(
         redactForSnippet(text, 200),
       );
     }
-    throw new Error(`AI service error (${response.status}): ${text.slice(0, 800)}`);
+    throw new Error(`AI service error (${response.status})`);
   }
 
   // Non-streaming: the function always buffered the whole response anyway, so
@@ -1686,27 +1686,15 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Per-user rate limiting
-    const rateLimit = await checkRateLimit(userId, "generate");
-    if (!rateLimit.allowed) {
-      return new Response(
-        JSON.stringify({ error: "You've reached the daily limit for meal plan generation. Please try again tomorrow." }),
-        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // FX-5: recordAction is deferred to AFTER the step-1 main generation succeeds
-    // (see below), so failed generations no longer burn a daily rate-limit slot
-    // (WR-06 pattern, regenerate-day:311-314).
-
     const {
       prompt,
-      pinnedRecipes,
+      pinnedRecipes: rawPinnedRecipes,
       skipSlots: rawSkipSlots,
       plannerMode,
       startDate: rawStartDate,
       retryContext: rawRetryContext,
     } = await req.json();
+    const pinnedRecipes = Array.isArray(rawPinnedRecipes) ? rawPinnedRecipes.slice(0, 28) : undefined;
 
     // Validate retryContext: optional string, capped at 8000 chars for defense in depth
     // (See plan 07-06 threat model T-07-12 / T-07-13.)
@@ -1868,7 +1856,7 @@ Deno.serve(async (req) => {
         const customRecipeId = sanitizeInput(r.customRecipeId, 50);
         const title = sanitizeInput(r.title, 100);
         const ingredients = Array.isArray(r.ingredients)
-          ? r.ingredients.map((ing: unknown) => sanitizeInput(ing, 80)).join(", ")
+          ? r.ingredients.slice(0, 60).map((ing: unknown) => sanitizeInput(ing, 80)).join(", ")
           : "";
         const mealType = sanitizeInput(r.mealType, 20);
         const provenance = [
@@ -2056,6 +2044,19 @@ ${preferenceChecklistLines ? `${preferenceChecklistLines}\n` : ""}[ ] No recipe 
     const encoder = new TextEncoder();
     const CHUNK_SIZE = 200;
 
+    // Per-user rate limiting. Reserved here, right before the first model call
+    // and before the stream opens, so the rejection is still a plain 429 JSON
+    // response. FX-5 / WR-06: the stream's catch below gives the slot back, so
+    // a failed generation does not use up the daily limit.
+    const reservation = await reserveAction(userId, "generate");
+    if (!reservation.allowed) {
+      return new Response(
+        JSON.stringify({ error: "You've reached the daily limit for meal plan generation. Please try again tomorrow." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    let reservationId = reservation.id;
+
     const stream = new ReadableStream({
       async start(controller) {
         // Send keepalive SSE comments every 15s while OpenAI calls run.
@@ -2073,10 +2074,11 @@ ${preferenceChecklistLines ? `${preferenceChecklistLines}\n` : ""}[ ] No recipe 
             { label: "meal-plan-generation" },
           );
 
-          // FX-5: the rate-limit slot is consumed only once a usable plan exists —
-          // see the recordAction call after the Step 4c degenerate-plan guard, so
-          // neither transient failures (truncation, parse, timeout, 429) nor an
-          // incomplete plan the user is told to retry burn quota.
+          // FX-5: the reserved rate-limit slot is kept only once a usable plan
+          // exists (after the Step 4c degenerate-plan guard) — until then the
+          // catch at the end of this stream releases it, so neither transient
+          // failures (truncation, parse, timeout, 429) nor an incomplete plan
+          // the user is told to retry burn quota.
 
           const mealsElapsed = ((Date.now() - startTime) / 1000).toFixed(1);
           console.log(`[generate-meal-plan] Meal generation complete in ${mealsElapsed}s`);
@@ -2143,7 +2145,7 @@ ${preferenceChecklistLines ? `${preferenceChecklistLines}\n` : ""}[ ] No recipe 
 
           // --- Step 3: Allergen safety check ---
           const allRecipes = allDays.flatMap((d) =>
-            d.meals.filter((m) => !m.pinned).map((m) => ({ title: m.title, ingredients: m.ingredients }))
+            d.meals.filter((m) => !isPinnedStub(m, pinnedRecipes)).map((m) => ({ title: m.title, ingredients: m.ingredients }))
           );
           const allergenViolations = checkAllergens(allRecipes, userAllergens);
           // ponytail: await HERE, before the RETRY_TIME_BUDGET_MS check below —
@@ -2175,7 +2177,7 @@ ${preferenceChecklistLines ? `${preferenceChecklistLines}\n` : ""}[ ] No recipe 
               // Re-extract and re-validate allergens
               const retryDays = (Array.isArray(allergenRetryResult.days) ? allergenRetryResult.days : []) as typeof allDays;
               const retryRecipes = retryDays.flatMap((d) =>
-                d.meals.filter((m) => !m.pinned).map((m) => ({ title: m.title, ingredients: m.ingredients }))
+                d.meals.filter((m) => !isPinnedStub(m, pinnedRecipes)).map((m) => ({ title: m.title, ingredients: m.ingredients }))
               );
               const retryAllergenViolations = checkAllergens(retryRecipes, userAllergens);
               if (retryAllergenViolations.length === 0) {
@@ -2330,10 +2332,9 @@ ${preferenceChecklistLines ? `${preferenceChecklistLines}\n` : ""}[ ] No recipe 
             }
           }
 
-          // FX-5: consume the daily rate-limit slot only now — the plan has
-          // passed every retry and the degenerate-plan guard, so a generation
-          // the user is told to retry never costs them one of their slots.
-          await recordAction(userId, "generate");
+          // FX-5: the plan has passed every retry and the degenerate-plan guard,
+          // so from here the reserved slot stays used.
+          reservationId = null;
 
           allDays = scaleLibraryMealsToHousehold(allDays, householdSize);
 
@@ -2660,7 +2661,7 @@ ${nightlyTipDays.map((d: string, i: number) => {
           // Retries above can replace meals, so scan the plan that is actually going
           // out. Earlier violations are kept too because they include the judge's
           // findings, and matching is by title, so meals no longer in the plan are ignored.
-          const finalMeals = allDays.flatMap((d) => d.meals.filter((m) => !m.pinned));
+          const finalMeals = allDays.flatMap((d) => d.meals.filter((m) => !isPinnedStub(m, pinnedRecipes)));
           const finalAllergenViolations = [...checkAllergens(finalMeals, userAllergens), ...allergenViolations];
           markAllergenCautions(finalMeals, finalAllergenViolations);
 
@@ -2700,6 +2701,7 @@ ${nightlyTipDays.map((d: string, i: number) => {
           console.error("generate-meal-plan stream error:", msg);
           const errEvent = JSON.stringify({ error: { message: msg } });
           controller.enqueue(encoder.encode(`data: ${errEvent}\n\n`));
+          await releaseAction(reservationId);
         } finally {
           controller.close();
         }

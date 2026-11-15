@@ -1,5 +1,6 @@
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { verifyUser } from "../_shared/auth.ts";
+import { reserveAction } from "../_shared/rateLimit.ts";
 import { JSON_ONLY_DIRECTIVE, redactForSnippet, ParseFailureError, parseAIJson } from "../_shared/jsonResponsePrompt.ts";
 
 import { AI_GATEWAY_URL, aiGatewayConfig, tokenBudgetField } from "../_shared/aiGateway.ts";
@@ -118,6 +119,14 @@ Deno.serve(async (req) => {
 
     const userMessage = `Convert these aggregated recipe ingredients to a store-ready shopping list:\n\n${JSON.stringify(items, null, 2)}`;
 
+    // A full week with its per-item recipe sources is about 45,000 characters; this is several times that.
+    if (items.length > 300 || userMessage.length > 200_000) {
+      return new Response(
+        JSON.stringify({ error: "The shopping list is too large to process." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
     const finalSystemPrompt =
       SYSTEM_PROMPT + "\n\n" + SHOPPING_LIST_ONE_SHOT_EXAMPLE + "\n\n" + JSON_ONLY_DIRECTIVE;
 
@@ -177,13 +186,22 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Reserved right before the model call and never given back: a refund on
+    // failure would let a caller loop answers that fail to parse, for free.
+    if (!(await reserveAction(userId, "shopping")).allowed) {
+      return new Response(
+        JSON.stringify({ error: "You've reached the daily limit for AI shopping lists. Please try again tomorrow." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
     const response = await callAIGatewayWithRetry(requestInit);
 
     if (!response.ok) {
       const text = await response.text();
       console.error("AI provider error:", response.status, text.slice(0, 500));
       if (response.status === 401) throw new Error("AI API key is invalid or missing permissions.");
-      throw new Error(`AI service error (${response.status}): ${text.slice(0, 300)}`);
+      throw new Error(`AI service error (${response.status})`);
     }
 
     const aiResponse = await response.json();

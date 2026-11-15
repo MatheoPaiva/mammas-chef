@@ -174,6 +174,7 @@ export function toText(command: string, result: unknown): string {
   if (command === "doctor") {
     const d = result as Result<typeof stack.doctor>;
     const lines = d.checks.map((c) => `${c.ok ? "ok " : "FIX"} ${c.check.padEnd(10)} ${c.detail}${"fix" in c ? ` — ${c.fix}` : ""}`);
+    if (d.network_warning) lines.push(`    network: ${d.network_warning}`);
     lines.push(`    second opinion: ${d.second_opinion_check}${d.second_opinion_fix ? ` — ${d.second_opinion_fix}` : ""}`);
     return lines.join("\n");
   }
