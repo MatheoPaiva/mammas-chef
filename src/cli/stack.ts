@@ -92,16 +92,6 @@ export async function doctor() {
   const checks = [
     { check: "node", ok: nodeMajor >= 20, detail: `Node ${process.versions.node}`, fix: "Install Node 20 or newer." },
     { check: "docker", ok: dockerOk, detail: dockerOk ? "running" : "not running", fix: "Start Docker Desktop." },
-    {
-      check: "network",
-      ok: exposed.length === 0,
-      detail: exposed.length ? `ports ${exposed.join(", ")} are open to other devices on your network` : "local ports aren't open to other devices",
-      fix: "Other devices on the same network can reach the database, which uses Supabase's well-known default local password and keys. " +
-        "Set Docker to publish ports on localhost only (Docker Desktop: network settings; " +
-        "Linux Docker Engine: set \"ip\": \"127.0.0.1\" in /etc/docker/daemon.json and restart Docker), then run `npx supabase stop` and start again. " +
-        "Don't run the stack on shared or public Wi-Fi until this is fixed. Turning on a firewall is usually not enough (Docker's ports tend to be let through), " +
-        "and this check reads Docker's port list, so it stays red if you block the ports some other way.",
-    },
     { check: "config", ok: existsSync(".env.local") && existsSync(FUNCTIONS_ENV), detail: ".env.local and supabase/functions/.env", fix: "Run `npm run setup`." },
     { check: "ai_key", ok: hasAiKey(), detail: "CEREBRAS_API_KEY or AI_API_KEY", fix: `Add a key to ${FUNCTIONS_ENV}.` },
     { check: "database", ok: dbOk, detail: SUPABASE_URL || "no URL in .env.local", fix: "Run `mammaschef start`." },
@@ -116,6 +106,12 @@ export async function doctor() {
   return {
     ok: checks.every((c) => c.ok),
     checks: checks.map((c) => (c.ok ? { check: c.check, ok: true, detail: c.detail } : c)),
+    // A warning, not a failed check: Docker Desktop only limits published ports to this computer on a
+    // Business plan, and blocking them in a firewall does not change what Docker reports.
+    network_warning: exposed.length
+      ? `Docker publishes ports ${exposed.join(", ")} to your whole network, and the local database uses Supabase's well-known default password and keys. ` +
+        "Only run this on a network you trust, or block incoming connections to Docker in your firewall. This reminder stays either way."
+      : null,
     second_opinion_check: secondOpinion,
     second_opinion_fix: secondOpinion === "off" ? `Optional: add AI_GATEWAY_API_KEY to ${FUNCTIONS_ENV} for a second allergen check.` : null,
   };
