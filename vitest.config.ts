@@ -2,6 +2,11 @@ import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
+// The flag only exists on Node 22.4+; passing it to Node 20 makes the test workers exit at once.
+const noWebStorage = process.allowedNodeEnvironmentFlags.has("--no-experimental-webstorage")
+  ? ["--no-experimental-webstorage"]
+  : [];
+
 export default defineConfig({
   plugins: [react()],
   test: {
@@ -14,8 +19,8 @@ export default defineConfig({
     // (e.g. `.clear`) unless backed by `--localstorage-file`. Disable it in
     // the test worker so jsdom's real localStorage is used instead.
     poolOptions: {
-      forks: { execArgv: ["--no-experimental-webstorage"] },
-      threads: { execArgv: ["--no-experimental-webstorage"] },
+      forks: { execArgv: noWebStorage },
+      threads: { execArgv: noWebStorage },
     },
   },
   resolve: {
