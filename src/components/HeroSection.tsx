@@ -34,9 +34,7 @@ const HeroSection = () => {
             <h1 className="font-heading font-extrabold text-5xl md:text-7xl leading-[1.05] text-primary-foreground mb-6">
               Mamma's
               <br />
-              <span className="text-secondary">Mediterranean</span>
-              <br />
-              Chef
+              <span className="text-secondary">Chef</span>
             </h1>
 
             <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-lg font-body leading-relaxed">

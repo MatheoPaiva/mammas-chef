@@ -19,7 +19,7 @@ function captureConsole(method: "log" | "warn" | "error") {
   const original = console[method];
   const lines: string[] = [];
   // deno-lint-ignore no-explicit-any
-  console[method] = (...args: any[]) => {
+  console[method] = (...args: unknown[]) => {
     lines.push(args.map((a) => (typeof a === "string" ? a : String(a))).join(" "));
   };
   return {
@@ -646,8 +646,7 @@ Deno.test({
       { title: "Big Recipe 1", ingredients: [{ name: bigIngredient }] },
     ];
 
-    // deno-lint-ignore no-explicit-any
-    const calls: any[] = [];
+    const calls: { questions: Record<string, unknown> }[] = [];
     let callIndex = 0;
     const fetchImpl = (async (_url: string, init?: RequestInit) => {
       const body = JSON.parse(init!.body as string);

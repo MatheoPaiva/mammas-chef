@@ -205,7 +205,7 @@ Deno.serve(async (req) => {
     }
 
     const aiResponse = await response.json();
-    let content: string = aiResponse.choices?.[0]?.message?.content ?? "";
+    const content: string = aiResponse.choices?.[0]?.message?.content ?? "";
 
     if (aiResponse.choices?.[0]?.finish_reason === "length") {
       throw new ParseFailureError(
