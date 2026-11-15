@@ -124,9 +124,13 @@ npm run lint
 
 Built with React, Vite, Tailwind and Supabase. Database changes live in `supabase/migrations`, and the AI functions in `supabase/functions`.
 
+## Contributing
+
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md) first, and report security problems as described in [SECURITY.md](SECURITY.md). Issues labelled `good first issue` are a friendly place to start.
+
 ## Support
 
-This project is shared as is and maintained when time allows, so issues and pull requests may not get a quick reply.
+This is a small project maintained by one person in their spare time. Contributions are welcome, and replies to issues and pull requests may take a few days.
 
 ## License
 

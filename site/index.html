@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mamma's Chef: an AI meal planner you run on your own computer</title><meta name="description" content="An open-source AI meal planner you run on your own computer. Make 7-day plans from a pantry photo or a typed request, built around your household's diet and allergies.">
+<link rel="canonical" href="https://mammaschef.ai/"><meta name="theme-color" content="#f9f7f2">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Mamma's Chef"><meta property="og:title" content="Mamma's Chef: an AI meal planner you run on your own computer"><meta property="og:description" content="An open-source AI meal planner you run on your own computer. Make 7-day plans from a pantry photo or a typed request, built around your household's diet and allergies."><meta property="og:url" content="https://mammaschef.ai/"><meta property="og:image" content="https://mammaschef.ai/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Mamma's Chef: an AI meal planner you run on your own computer"><meta name="twitter:description" content="An open-source AI meal planner you run on your own computer. Make 7-day plans from a pantry photo or a typed request, built around your household's diet and allergies."><meta name="twitter:image" content="https://mammaschef.ai/assets/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet"><style>:root{--bg:hsl(40 33% 97%);--fg:hsl(30 10% 15%);--olive:hsl(120 15% 49%);--olive-d:hsl(120 15% 35%);--terra:hsl(24 60% 62%);--terra-d:hsl(24 60% 48%);--terra-text:hsl(24 60% 36%);--sky:hsl(197 71% 73%);--muted:hsl(40 20% 90%);--soft:hsl(30 10% 33%);--r:1.5rem}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:1.0625rem/1.65 "Plus Jakarta Sans",system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:Outfit,system-ui,sans-serif;line-height:1.15;margin:0 0 .6em;letter-spacing:-.01em}
+h1{font-size:clamp(2.2rem,6vw,3.7rem);font-weight:700}h2{font-size:clamp(1.7rem,4vw,2.4rem);font-weight:600}h3{font-size:1.2rem;font-weight:600}
+p{margin:0 0 1em}a{color:var(--olive-d)}a:hover{color:var(--terra-text)}
+:focus-visible{outline:3px solid var(--terra-d);outline-offset:3px;border-radius:.5rem}
+.wrap{max-width:68rem;margin:0 auto;padding:0 1rem}
+section{padding:3.5rem 0}
+header{padding:1rem 0}header .wrap{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;align-items:center;justify-content:space-between}
+.brand{font:700 1.4rem Outfit,sans-serif;color:var(--fg);text-decoration:none}
+nav{display:flex;gap:1.25rem;font-weight:600}nav a{text-decoration:none}nav a:hover{text-decoration:underline}
+.eyebrow{font:600 .85rem Outfit,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--terra-text);margin-bottom:.75rem}
+.hero .wrap{display:grid;gap:2rem;align-items:center}
+@media(min-width:56rem){.hero .wrap{grid-template-columns:1.05fr 1fr}}
+.lead{font-size:1.2rem;color:var(--soft)}
+.btns{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.5rem}
+.btn{display:inline-block;padding:.8rem 1.5rem;border-radius:999px;font-weight:700;text-decoration:none;border:2px solid var(--olive-d);transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.p{background:var(--olive-d);color:#fff}.btn.p:hover{color:#fff;background:hsl(120 15% 28%)}
+.btn.s{color:var(--olive-d)}.btn.s:hover{background:var(--muted);color:var(--olive-d)}
+.shot{margin:0;background:var(--muted);border-radius:var(--r);overflow:hidden;box-shadow:0 12px 32px hsl(30 10% 15%/.12);border:1px solid hsl(30 10% 15%/.08)}
+.shot img{display:block;width:100%;height:auto;aspect-ratio:var(--ar,16/10);object-fit:cover;object-position:top;background:var(--muted);font-size:.9rem;color:var(--soft)}
+.shot figcaption{padding:.75rem 1.1rem;font-size:.92rem;color:var(--soft);background:var(--bg)}
+.hero .shot{transform:rotate(1.2deg)}
+.grid{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))}
+.card{background:#fff;border-radius:var(--r);padding:1.5rem;border:1px solid hsl(30 10% 15%/.08);border-top:5px solid var(--olive)}
+.card:nth-child(3n+2){border-top-color:var(--terra)}.card:nth-child(3n){border-top-color:var(--sky)}
+.card p{margin:0;color:var(--soft)}
+.two{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr));margin-top:1.5rem}
+.band{background:var(--muted);border-radius:2rem}
+pre{position:relative;margin:1rem 0;padding:1.1rem 1rem;background:hsl(30 10% 13%);color:hsl(40 33% 94%);border-radius:1.1rem;overflow-x:auto;font:.9rem/1.7 ui-monospace,SFMono-Regular,Menlo,monospace}
+.cp{display:block;margin:-.4rem 0 1rem auto;padding:.4rem 1rem;border-radius:999px;border:2px solid var(--olive-d);background:#fff;color:var(--olive-d);font:700 .85rem "Plus Jakarta Sans",sans-serif;cursor:pointer}
+.cp:hover{background:var(--muted)}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.92em}
+p code,li code{background:var(--muted);padding:.1em .4em;border-radius:.4rem;overflow-wrap:anywhere}
+ul.l{padding-left:1.2rem}ul.l li{margin-bottom:.4rem}
+.note{background:#fff;border-left:6px solid var(--terra);border-radius:1rem;padding:1.25rem 1.5rem}
+footer{padding:2rem 0 3rem;color:var(--soft);font-size:.95rem}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}.btn:hover{transform:none}}
+</style></head><body>
+<header><div class="wrap"><a class="brand" href="#top">Mamma's Chef</a>
+<nav aria-label="Main"><a href="https://github.com/PreillySMP/mammas-chef">GitHub</a><a href="#install">Install</a><a href="#contribute">Contribute</a></nav></div></header>
+<main id="top">
+<section class="hero"><div class="wrap"><div>
+<p class="eyebrow">Free and open source</p>
+<h1>An AI meal planner you run on your own computer.</h1>
+<p class="lead">Get a 7-day plan from a pantry photo or a typed request, built around your household's diet and allergies. It is free, MIT licensed and open source.</p>
+<div class="btns"><a class="btn p" href="https://github.com/PreillySMP/mammas-chef">Get it on GitHub</a><a class="btn s" href="#install">Install in 3 commands</a></div></div>
+<figure class="shot" style="--ar:4/3"><img src="assets/hero.jpg" width="1344" height="752" style="object-position:right center" alt="Two people sharing a platter of roasted vegetables and chickpeas, with olives, flatbread and lemons on the table" fetchpriority="high"></figure>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap"><figure class="shot" style="--ar:1440/780"><img src="assets/screenshot-planner.png" width="1440" height="780" alt="The weekly meal plan view in Mamma's Chef, with breakfast, lunch and dinner for each day" loading="lazy"><figcaption>The weekly plan view. Swap a meal or regenerate a whole day from here.</figcaption></figure></div></section>
+
+<section id="features"><div class="wrap"><h2>What it does</h2>
+<div class="grid">
+<div class="card"><h3>Plan from what you have</h3><p>Start from a pantry photo, a typed request, your favourite recipes, or any mix of the three.</p></div>
+<div class="card"><h3>Change one thing</h3><p>Swap a single meal or regenerate a whole day, and leave the rest of the week alone.</p></div>
+<div class="card"><h3>Shopping list by aisle</h3><p>One consolidated list, grouped by aisle, with items you already have in the pantry taken out.</p></div>
+<div class="card"><h3>Prep-day strategy</h3><p>Prep day guides and night-before timelines to cut cooking time during the week.</p></div>
+<div class="card"><h3>Recipe library</h3><p>Browse recipes, add your own custom recipes, and save favourites to pin into future plans.</p></div>
+<div class="card"><h3>Print and export</h3><p>Save a plan as a PDF, add meals to your calendar as an .ics file, or download a CSV spreadsheet.</p></div>
+</div>
+<div class="two">
+<figure class="shot" style="--ar:1440/780"><img src="assets/screenshot-shopping.png" width="1440" height="780" alt="A shopping list grouped by aisle" loading="lazy"><figcaption>Shopping list, grouped by aisle.</figcaption></figure>
+<figure class="shot" style="--ar:1440/780"><img src="assets/screenshot-recipe.png" width="1440" height="780" alt="A recipe with ingredients, steps and nutrition details" loading="lazy"><figcaption>A recipe with steps, calories and macros, plus toddler and glucose tips.</figcaption></figure>
+</div></div></section>
+
+<section id="install"><div class="wrap band" style="padding:2.5rem 1.25rem"><h2>Install</h2>
+<p>You need three things:</p>
+<ul class="l"><li><a href="https://nodejs.org">Node.js</a> 20 or newer</li><li><a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a>, running</li><li>An API key from an AI provider. You pay that provider for what you use.</li></ul>
+<pre><code>git clone https://github.com/PreillySMP/mammas-chef.git
+cd mammas-chef
+npm run setup</code></pre><button class="cp" type="button" data-copy="git clone https://github.com/PreillySMP/mammas-chef.git&#10;cd mammas-chef&#10;npm run setup">Copy commands</button>
+<p>The first run downloads the database containers and can take several minutes.</p>
+<ol class="l"><li>Open <code>supabase/functions/.env</code> and add your AI key.</li>
+<li>Run <code>npm start</code>.</li>
+<li>Open <a href="http://localhost:8080">http://localhost:8080</a> and create an account. It only exists on your computer, and no confirmation email is sent.</li></ol>
+<h3>Which AI providers work</h3>
+<p>Cerebras is the one the app was built and tuned on, and the only one tested end to end. OpenAI and other OpenAI-compatible services use the same request format but have not generated a full plan yet, and results may be weaker. A model has to return long, well-formed JSON, and small local models often cannot.</p>
+</div></section>
+
+<section id="developers"><div class="wrap"><h2>For developers and AI agents</h2>
+<p>The <code>mammaschef</code> command plans meals from the terminal. It uses the same database, account and AI key as the website. Every command takes <code>--json</code>, and edits save right away.</p>
+<pre><code>mammaschef plan "plan next week, quick dinners, we have rice and spinach"
+mammaschef show latest
+mammaschef swap latest tuesday dinner "something faster"
+mammaschef regen latest thursday
+mammaschef shopping latest</code></pre>
+<p>Run <code>mammaschef help</code> for every command. <code>mammaschef mcp</code> runs a local MCP server over stdio. To add it to Claude Code:</p>
+<pre><code>claude mcp add mammaschef -- mammaschef mcp</code></pre><button class="cp" type="button" data-copy="claude mcp add mammaschef -- mammaschef mcp">Copy command</button>
+<p>Claude Code is the agent tested so far. Other agents, including OpenClaw and Hermes, have not been tested. The Grok app is not supported. See the README for the setup steps that come first, such as <code>npm link</code>.</p>
+<p>Built with React, Vite, Tailwind and Supabase.</p></div></section>
+
+<section id="limits"><div class="wrap"><h2>Honest limits</h2>
+<div class="note">
+<ul class="l" style="margin:0">
+<li><strong>Allergy checks are a safety net, not a guarantee.</strong> The app tells the AI what to avoid, scans each plan for allergen keywords, and can ask a second AI model for an opinion. The AI still suggests foods you asked it to avoid. In testing, a plan for a sesame allergy included hummus.</li>
+<li>The keyword scan only knows the words on its list, so a meal with no warning can still contain an allergen. The second-opinion check needs a Vercel AI Gateway key and is skipped without one.</li>
+<li>Always read every recipe, ingredient and label yourself. This is not medical advice.</li>
+<li>Only Cerebras is tested end to end.</li>
+<li>This is early software, version 0.1.0, maintained by one person in their spare time. Replies to issues and pull requests may take a few days.</li>
+<li>Each account can generate 10 plans and swap 20 meals a day. You can change the limits in <code>supabase/functions/_shared/rateLimit.ts</code>.</li>
+<li>It is built for personal use on your own computer, not for the public internet.</li>
+</ul></div></div></section>
+
+<section id="contribute"><div class="wrap"><h2>Contribute</h2>
+<p>Help is welcome with testing other AI providers, trying other agents with the MCP server, widening allergy-check coverage, and improving the docs.</p>
+<div class="btns"><a class="btn p" href="https://github.com/PreillySMP/mammas-chef/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a><a class="btn s" href="https://github.com/PreillySMP/mammas-chef/discussions">Discussions</a><a class="btn s" href="https://github.com/PreillySMP/mammas-chef/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a></div></div></section>
+
+<section id="hosted"><div class="wrap"><div class="note"><h2 style="font-size:1.5rem">Used the hosted app?</h2>
+<p>The hosted app at mammaschef.ai is being retired. The same app is now free to run yourself, and the steps are in <a href="#install">Install</a>. Plans saved in the hosted app cannot be carried over.</p></div></div></section>
+</main>
+<footer><div class="wrap"><p>Mamma's Chef is MIT licensed. <a href="https://github.com/PreillySMP/mammas-chef">Source on GitHub</a>.</p></div></footer>
+<script>
+document.querySelectorAll(".cp").forEach(function(b){b.addEventListener("click",function(){var t=b.dataset.copy,l=b.textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent="Copied"},function(){b.textContent="Press Ctrl+C on the text"});setTimeout(function(){b.textContent=l},2000)})});
+</script>
+</body></html>

@@ -3,11 +3,17 @@ import { aiGatewayConfig, tokenBudgetField } from "./aiGateway.ts";
 
 function withEnv(values: Record<string, string | undefined>, fn: () => void) {
   const saved = Object.keys(values).map((k) => [k, Deno.env.get(k)] as const);
-  for (const [k, v] of Object.entries(values)) v === undefined ? Deno.env.delete(k) : Deno.env.set(k, v);
+  for (const [k, v] of Object.entries(values)) {
+    if (v === undefined) Deno.env.delete(k);
+    else Deno.env.set(k, v);
+  }
   try {
     fn();
   } finally {
-    for (const [k, v] of saved) v === undefined ? Deno.env.delete(k) : Deno.env.set(k, v);
+    for (const [k, v] of saved) {
+      if (v === undefined) Deno.env.delete(k);
+      else Deno.env.set(k, v);
+    }
   }
 }
 
