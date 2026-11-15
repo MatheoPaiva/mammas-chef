@@ -34,6 +34,11 @@ Deno.test("checkAllergens finds a real allergen next to a false-positive phrase"
   assertEquals(violationsFor("2 cups goat milk", "Milk").map((v) => v.matchedKeyword), ["milk"]);
 });
 
+Deno.test("checkAllergens flags soba for Wheat: most of it is part wheat flour", () => {
+  assertEquals(violationsFor("8 oz buckwheat noodles", "Wheat").map((v) => v.matchedKeyword), ["noodle"]);
+  assertEquals(violationsFor("2 bundles soba", "Wheat").map((v) => v.matchedKeyword), ["soba"]);
+});
+
 Deno.test("checkAllergens flags egg noodles for Eggs", () => {
   assertEquals(violationsFor("egg noodles", "Eggs").length, 1);
 });
@@ -45,8 +50,8 @@ Deno.test("checkAllergens still ignores a false-positive phrase on its own", () 
   assertEquals(violationsFor("2 tbsp walnut butter", "Milk"), []);
   assertEquals(violationsFor("1 cup oat milk", "Milk"), []);
   assertEquals(violationsFor("1 large eggplant", "Eggs"), []);
-  assertEquals(violationsFor("8 oz buckwheat noodles", "Wheat"), []);
   assertEquals(violationsFor("1 cup buckwheat flour", "Wheat"), []);
+  assertEquals(violationsFor("1 cup buckwheat groats", "Wheat"), []);
 });
 
 Deno.test("isPinnedStub trusts pinned only for a recipe the request pinned", () => {

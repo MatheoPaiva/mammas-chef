@@ -58,13 +58,13 @@ const ALLERGEN_MAP: Record<string, AllergenDef> = {
       "wheat", "flour", "bread", "pasta", "noodle", "couscous",
       "bulgur", "farro", "seitan", "panko", "breadcrumb",
       "tortilla", "pita", "naan", "cracker", "croissant",
-      "all-purpose flour", "bread flour", "semolina",
+      "all-purpose flour", "bread flour", "semolina", "soba",
     ],
     falsePositives: [
       "rice flour", "almond flour", "coconut flour", "oat flour",
       "chickpea flour", "corn tortilla", "rice noodle",
-      "buckwheat flour", "buckwheat noodle",  // listed before "buckwheat" so the whole phrase is cut out
-      "buckwheat",  // buckwheat is NOT wheat
+      "buckwheat flour",  // listed before "buckwheat" so the whole phrase is cut out
+      "buckwheat",  // buckwheat is NOT wheat, but buckwheat noodles (soba) usually contain wheat flour, so they still match "noodle"
     ],
   },
   Fish: {

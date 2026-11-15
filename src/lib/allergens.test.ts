@@ -142,8 +142,13 @@ describe("checkAllergens", () => {
   });
 
   it("does NOT flag buckwheat for wheat allergy", () => {
-    const recipes = [{ title: "Soba", ingredients: ["8 oz buckwheat noodles", "1 cup broth"] }];
+    const recipes = [{ title: "Porridge", ingredients: ["1 cup buckwheat groats", "2 tbsp buckwheat flour"] }];
     expect(checkAllergens(recipes, ["Wheat"])).toEqual([]);
+  });
+
+  it("flags buckwheat noodles and soba for wheat allergy (most soba is part wheat flour)", () => {
+    const recipes = [{ title: "Soba", ingredients: ["8 oz buckwheat noodles", "2 bundles soba", "1 cup broth"] }];
+    expect(checkAllergens(recipes, ["Wheat"]).map((v) => v.ingredient)).toEqual(["8 oz buckwheat noodles", "2 bundles soba"]);
   });
 
   // --- A real allergen next to a false-positive phrase ---
